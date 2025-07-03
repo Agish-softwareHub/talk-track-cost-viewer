@@ -21,7 +21,8 @@ import {
   Target,
   CreditCard,
   Code2,
-  FileText
+  FileText,
+  Puzzle
 } from "lucide-react";
 
 const menuItems = [
@@ -39,6 +40,7 @@ const menuItems = [
   { title: "Usage & Credits", url: "/credits", icon: Clock, color: "from-violet-500 to-purple-500" },
   { title: "Billing & Plans", url: "/billing", icon: CreditCard, color: "from-green-500 to-emerald-500" },
   { title: "Developer API", url: "/developer", icon: Code2, color: "from-orange-500 to-red-500" },
+  { title: "Integration Hub", url: "/integration-hub", icon: Puzzle, color: "from-cyan-500 to-blue-500" },
   { title: "Google Integration", url: "/google-integration", icon: Chrome, color: "from-blue-500 to-green-500" },
   { title: "WhatsApp Integration", url: "/whatsapp-integration", icon: MessageCircle, color: "from-green-500 to-teal-500" },
   { title: "Settings", url: "/settings", icon: Settings, color: "from-gray-500 to-slate-500" },
