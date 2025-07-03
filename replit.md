@@ -103,6 +103,11 @@ Changelog:
 - July 03, 2025. Initial setup
 - July 03, 2025. Migration from Lovable to Replit completed successfully
 - July 03, 2025. Added comprehensive Integration Hub with Google/WhatsApp configuration and advanced features
+- July 03, 2025. Added four new powerful pages:
+  • Live Monitoring: Real-time call oversight with agent status, queue management, and system alerts
+  • Knowledge Base: Comprehensive guides, FAQs, and quick tutorials with search and filtering
+  • Call Recordings: Audio player with playback controls, transcript search, and recording management
+  • Customer CRM: Complete customer relationship management with call history and sales opportunities
 ```
 
 ## User Preferences

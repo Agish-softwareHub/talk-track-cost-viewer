@@ -22,7 +22,11 @@ import {
   CreditCard,
   Code2,
   FileText,
-  Puzzle
+  Puzzle,
+  Monitor,
+  BookOpen,
+  Headphones,
+  UserCheck
 } from "lucide-react";
 
 const menuItems = [
@@ -36,6 +40,10 @@ const menuItems = [
   { title: "Sentiment Analysis", url: "/sentiment", icon: Brain, color: "from-pink-500 to-rose-500" },
   { title: "Performance", url: "/performance", icon: Zap, color: "from-yellow-500 to-orange-500" },
   { title: "Security", url: "/security", icon: Shield, color: "from-red-500 to-pink-500" },
+  { title: "Live Monitoring", url: "/live-monitoring", icon: Monitor, color: "from-emerald-500 to-teal-500" },
+  { title: "Call Recordings", url: "/call-recordings", icon: Headphones, color: "from-purple-500 to-indigo-500" },
+  { title: "Customer CRM", url: "/customer-crm", icon: UserCheck, color: "from-blue-500 to-purple-500" },
+  { title: "Knowledge Base", url: "/knowledge-base", icon: BookOpen, color: "from-indigo-500 to-blue-500" },
   { title: "Transcripts", url: "/transcripts", icon: FileText, color: "from-cyan-500 to-blue-500" },
   { title: "Usage & Credits", url: "/credits", icon: Clock, color: "from-violet-500 to-purple-500" },
   { title: "Billing & Plans", url: "/billing", icon: CreditCard, color: "from-green-500 to-emerald-500" },
