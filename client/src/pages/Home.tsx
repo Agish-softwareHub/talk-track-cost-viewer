@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import { 
   Bot, Phone, Brain, Zap, Shield, Target, ArrowRight, CheckCircle, Users, BarChart3, Headphones, Clock,
   Sparkles, Globe, MessageCircle, TrendingUp, Award, Star, Play, ChevronRight, Menu, X,
@@ -203,7 +203,7 @@ export default function Home() {
               <Button variant="ghost" className="hidden md:flex">
                 Sign In
               </Button>
-              <Link href="/dashboard">
+              <Link to="/dashboard">
                 <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg">
                   <Sparkles className="mr-2 h-4 w-4" />
                   Try Dashboard
@@ -301,7 +301,7 @@ export default function Home() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link href="/dashboard">
+              <Link to="/dashboard">
                 <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 shadow-lg hover:shadow-xl transition-all">
                   <Bot className="mr-2 h-5 w-5" />
                   Start Free Trial
@@ -729,7 +729,7 @@ export default function Home() {
             Join thousands of businesses already using AI CallCenter to deliver exceptional customer experiences.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/dashboard">
+            <Link to="/dashboard">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4 shadow-lg">
                 <Rocket className="mr-2 h-5 w-5" />
                 Start Your Free Trial
