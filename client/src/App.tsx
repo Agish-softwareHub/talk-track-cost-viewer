@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
+import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Reports from "./pages/Reports";
 import CallDetails from "./pages/CallDetails";
@@ -40,33 +41,32 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/queue" element={<CallQueue />} />
-            <Route path="/scheduler" element={<Scheduler />} />
-            <Route path="/scoring" element={<CallScoring />} />
-            <Route path="/sentiment" element={<SentimentAnalysis />} />
-            <Route path="/performance" element={<Performance />} />
-            <Route path="/security" element={<Security />} />
-            <Route path="/transcripts" element={<Transcripts />} />
-            <Route path="/credits" element={<Credits />} />
-            <Route path="/billing" element={<Billing />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/ai-agents" element={<AIAgents />} />
-            <Route path="/developer" element={<Developer />} />
-            <Route path="/integration-hub" element={<IntegrationHub />} />
-            <Route path="/live-monitoring" element={<LiveMonitoring />} />
-            <Route path="/knowledge-base" element={<KnowledgeBase />} />
-            <Route path="/call-recordings" element={<CallRecordings />} />
-            <Route path="/customer-crm" element={<CustomerCRM />} />
-            <Route path="/google-integration" element={<GoogleIntegration />} />
-            <Route path="/whatsapp-integration" element={<WhatsAppIntegration />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
+          <Route path="/reports" element={<Layout><Reports /></Layout>} />
+          <Route path="/analytics" element={<Layout><Analytics /></Layout>} />
+          <Route path="/queue" element={<Layout><CallQueue /></Layout>} />
+          <Route path="/scheduler" element={<Layout><Scheduler /></Layout>} />
+          <Route path="/scoring" element={<Layout><CallScoring /></Layout>} />
+          <Route path="/sentiment" element={<Layout><SentimentAnalysis /></Layout>} />
+          <Route path="/performance" element={<Layout><Performance /></Layout>} />
+          <Route path="/security" element={<Layout><Security /></Layout>} />
+          <Route path="/transcripts" element={<Layout><Transcripts /></Layout>} />
+          <Route path="/credits" element={<Layout><Credits /></Layout>} />
+          <Route path="/billing" element={<Layout><Billing /></Layout>} />
+          <Route path="/settings" element={<Layout><Settings /></Layout>} />
+          <Route path="/ai-agents" element={<Layout><AIAgents /></Layout>} />
+          <Route path="/developer" element={<Layout><Developer /></Layout>} />
+          <Route path="/integration-hub" element={<Layout><IntegrationHub /></Layout>} />
+          <Route path="/live-monitoring" element={<Layout><LiveMonitoring /></Layout>} />
+          <Route path="/knowledge-base" element={<Layout><KnowledgeBase /></Layout>} />
+          <Route path="/call-recordings" element={<Layout><CallRecordings /></Layout>} />
+          <Route path="/customer-crm" element={<Layout><CustomerCRM /></Layout>} />
+          <Route path="/google-integration" element={<Layout><GoogleIntegration /></Layout>} />
+          <Route path="/whatsapp-integration" element={<Layout><WhatsAppIntegration /></Layout>} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

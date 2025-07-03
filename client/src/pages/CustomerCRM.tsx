@@ -29,13 +29,13 @@ export default function CustomerCRM() {
       totalSpent: "$12,450",
       satisfaction: 4.8,
       tags: ["vip", "enterprise", "technical"],
-      notes: "Long-term customer, prefers technical discussions",
+      notes: "Prefers AI agents for technical support, high satisfaction with automated responses",
       avatar: "JA",
       joinDate: "2023-03-15",
       callHistory: [
-        { date: "2024-01-15", type: "Support", duration: "12m", outcome: "Resolved", agent: "Sarah Johnson" },
-        { date: "2024-01-10", type: "Sales", duration: "8m", outcome: "Follow-up", agent: "Mike Wilson" },
-        { date: "2024-01-05", type: "Technical", duration: "25m", outcome: "Escalated", agent: "Emily Davis" }
+        { date: "2024-01-15", type: "Support", duration: "12m", outcome: "Resolved", agent: "AI Agent Alpha" },
+        { date: "2024-01-10", type: "Sales", duration: "8m", outcome: "Follow-up", agent: "AI Agent Beta" },
+        { date: "2024-01-05", type: "Technical", duration: "25m", outcome: "Escalated", agent: "AI Agent Gamma" }
       ]
     },
     {
@@ -52,12 +52,12 @@ export default function CustomerCRM() {
       totalSpent: "$5,280",
       satisfaction: 4.2,
       tags: ["creative", "recurring"],
-      notes: "Frequent user, works in design industry",
+      notes: "Frequent user, prefers quick AI responses for routine inquiries",
       avatar: "SM",
       joinDate: "2023-08-22",
       callHistory: [
-        { date: "2024-01-12", type: "Billing", duration: "6m", outcome: "Resolved", agent: "John Smith" },
-        { date: "2024-01-08", type: "Support", duration: "15m", outcome: "Resolved", agent: "Lisa Brown" }
+        { date: "2024-01-12", type: "Billing", duration: "6m", outcome: "Resolved", agent: "AI Agent Delta" },
+        { date: "2024-01-08", type: "Support", duration: "15m", outcome: "Resolved", agent: "AI Agent Alpha" }
       ]
     },
     {
@@ -74,12 +74,12 @@ export default function CustomerCRM() {
       totalSpent: "$890",
       satisfaction: 3.9,
       tags: ["startup", "potential"],
-      notes: "Interested in upgrading to premium plan",
+      notes: "New to AI call agents, showing high interest in automation features",
       avatar: "MC",
       joinDate: "2024-01-01",
       callHistory: [
-        { date: "2024-01-14", type: "Sales", duration: "22m", outcome: "Interested", agent: "Mike Wilson" },
-        { date: "2024-01-02", type: "Onboarding", duration: "18m", outcome: "Completed", agent: "David Lee" }
+        { date: "2024-01-14", type: "Sales", duration: "22m", outcome: "Interested", agent: "AI Agent Beta" },
+        { date: "2024-01-02", type: "Onboarding", duration: "18m", outcome: "Completed", agent: "AI Agent Support" }
       ]
     },
     {
@@ -96,12 +96,12 @@ export default function CustomerCRM() {
       totalSpent: "$18,900",
       satisfaction: 4.6,
       tags: ["consulting", "high-value"],
-      notes: "Previously very active, may need re-engagement",
+      notes: "Previously active, satisfied with AI agent efficiency but needs re-engagement",
       avatar: "LR",
       joinDate: "2022-11-10",
       callHistory: [
-        { date: "2023-12-20", type: "Support", duration: "9m", outcome: "Resolved", agent: "Emily Davis" },
-        { date: "2023-12-15", type: "Account Review", duration: "35m", outcome: "Renewed", agent: "Sarah Johnson" }
+        { date: "2023-12-20", type: "Support", duration: "9m", outcome: "Resolved", agent: "AI Agent Alpha" },
+        { date: "2023-12-15", type: "Account Review", duration: "35m", outcome: "Renewed", agent: "AI Agent Premium" }
       ]
     }
   ];
