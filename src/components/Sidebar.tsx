@@ -18,7 +18,10 @@ import {
   Shield,
   Zap,
   Brain,
-  Target
+  Target,
+  CreditCard,
+  Code2,
+  FileText
 } from "lucide-react";
 
 const menuItems = [
@@ -27,12 +30,15 @@ const menuItems = [
   { title: "Analytics", url: "/analytics", icon: TrendingUp, color: "from-indigo-500 to-purple-500" },
   { title: "Call Queue", url: "/queue", icon: Phone, color: "from-teal-500 to-cyan-500" },
   { title: "Scheduler", url: "/scheduler", icon: Calendar, color: "from-amber-500 to-orange-500" },
-  { title: "Usage & Credits", url: "/credits", icon: Clock, color: "from-violet-500 to-purple-500" },
   { title: "AI Agents", url: "/ai-agents", icon: Bot, color: "from-emerald-500 to-teal-500" },
   { title: "Call Scoring", url: "/scoring", icon: Target, color: "from-blue-500 to-indigo-500" },
   { title: "Sentiment Analysis", url: "/sentiment", icon: Brain, color: "from-pink-500 to-rose-500" },
   { title: "Performance", url: "/performance", icon: Zap, color: "from-yellow-500 to-orange-500" },
   { title: "Security", url: "/security", icon: Shield, color: "from-red-500 to-pink-500" },
+  { title: "Transcripts", url: "/transcripts", icon: FileText, color: "from-cyan-500 to-blue-500" },
+  { title: "Usage & Credits", url: "/credits", icon: Clock, color: "from-violet-500 to-purple-500" },
+  { title: "Billing & Plans", url: "/billing", icon: CreditCard, color: "from-green-500 to-emerald-500" },
+  { title: "Developer API", url: "/developer", icon: Code2, color: "from-orange-500 to-red-500" },
   { title: "Google Integration", url: "/google-integration", icon: Chrome, color: "from-blue-500 to-green-500" },
   { title: "WhatsApp Integration", url: "/whatsapp-integration", icon: MessageCircle, color: "from-green-500 to-teal-500" },
   { title: "Settings", url: "/settings", icon: Settings, color: "from-gray-500 to-slate-500" },
@@ -48,7 +54,7 @@ export function Sidebar() {
   };
 
   return (
-    <div className={`bg-white/95 backdrop-blur-lg border-r border-gray-200/50 shadow-xl transition-all duration-300 flex flex-col ${collapsed ? "w-16" : "w-72"}`}>
+    <div className={`bg-white/95 backdrop-blur-lg border-r border-gray-200/50 shadow-xl transition-all duration-300 flex flex-col ${collapsed ? "w-20" : "w-72"}`}>
       {/* Header */}
       <div className="p-6 border-b border-gray-200/50">
         <div className="flex items-center justify-between">
@@ -91,7 +97,7 @@ export function Sidebar() {
                   <span className="ml-4 font-medium text-sm">{item.title}</span>
                 )}
                 {collapsed && (
-                  <div className="absolute left-16 bg-gray-900 text-white px-3 py-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 text-sm whitespace-nowrap">
+                  <div className="absolute left-20 bg-gray-900 text-white px-3 py-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 text-sm whitespace-nowrap">
                     {item.title}
                   </div>
                 )}

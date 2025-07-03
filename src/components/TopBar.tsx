@@ -1,7 +1,6 @@
 
-import { Search, User, Settings, LogOut, Moon, Sun } from "lucide-react";
+import { User, Settings, LogOut, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,13 +23,11 @@ export function TopBar() {
   return (
     <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 px-6 py-4 sticky top-0 z-50">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
-        {/* Search Bar */}
-        <div className="flex-1 max-w-md relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-          <Input
-            placeholder="Search agents, calls, or reports..."
-            className="pl-10 bg-gray-50/50 border-gray-200 focus:bg-white transition-colors"
-          />
+        {/* Logo/Title Area */}
+        <div className="flex-1">
+          <h2 className="text-xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            AI CallCenter Dashboard
+          </h2>
         </div>
 
         {/* Right Side Actions */}
