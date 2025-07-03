@@ -27,6 +27,10 @@ import AIAgents from "./pages/AIAgents";
 import Billing from "./pages/Billing";
 import Developer from "./pages/Developer";
 import IntegrationHub from "./pages/IntegrationHub";
+import LiveMonitoring from "./pages/LiveMonitoring";
+import KnowledgeBase from "./pages/KnowledgeBase";
+import CallRecordings from "./pages/CallRecordings";
+import CustomerCRM from "./pages/CustomerCRM";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +58,10 @@ const App = () => (
             <Route path="/ai-agents" element={<AIAgents />} />
             <Route path="/developer" element={<Developer />} />
             <Route path="/integration-hub" element={<IntegrationHub />} />
+            <Route path="/live-monitoring" element={<LiveMonitoring />} />
+            <Route path="/knowledge-base" element={<KnowledgeBase />} />
+            <Route path="/call-recordings" element={<CallRecordings />} />
+            <Route path="/customer-crm" element={<CustomerCRM />} />
             <Route path="/google-integration" element={<GoogleIntegration />} />
             <Route path="/whatsapp-integration" element={<WhatsAppIntegration />} />
             <Route path="*" element={<NotFound />} />
