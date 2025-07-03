@@ -14,6 +14,14 @@ import Settings from "./pages/Settings";
 import AIConfiguration from "./pages/AIConfiguration";
 import GoogleIntegration from "./pages/GoogleIntegration";
 import WhatsAppIntegration from "./pages/WhatsAppIntegration";
+import Analytics from "./pages/Analytics";
+import CallQueue from "./pages/CallQueue";
+import TeamManagement from "./pages/TeamManagement";
+import Scheduler from "./pages/Scheduler";
+import CallScoring from "./pages/CallScoring";
+import SentimentAnalysis from "./pages/SentimentAnalysis";
+import Performance from "./pages/Performance";
+import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +38,14 @@ const App = () => (
             <Route path="/reports" element={<Reports />} />
             <Route path="/details" element={<CallDetails />} />
             <Route path="/transcripts" element={<Transcripts />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/queue" element={<CallQueue />} />
+            <Route path="/team" element={<TeamManagement />} />
+            <Route path="/scheduler" element={<Scheduler />} />
+            <Route path="/scoring" element={<CallScoring />} />
+            <Route path="/sentiment" element={<SentimentAnalysis />} />
+            <Route path="/performance" element={<Performance />} />
+            <Route path="/security" element={<Security />} />
             <Route path="/credits" element={<Credits />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/ai-config" element={<AIConfiguration />} />
