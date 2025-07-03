@@ -26,6 +26,7 @@ import NotFound from "./pages/NotFound";
 import AIAgents from "./pages/AIAgents";
 import Billing from "./pages/Billing";
 import Developer from "./pages/Developer";
+import IntegrationHub from "./pages/IntegrationHub";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/settings" element={<Settings />} />
             <Route path="/ai-agents" element={<AIAgents />} />
             <Route path="/developer" element={<Developer />} />
+            <Route path="/integration-hub" element={<IntegrationHub />} />
             <Route path="/google-integration" element={<GoogleIntegration />} />
             <Route path="/whatsapp-integration" element={<WhatsAppIntegration />} />
             <Route path="*" element={<NotFound />} />
