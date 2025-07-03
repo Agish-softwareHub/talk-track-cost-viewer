@@ -1,8 +1,11 @@
 
 import { MetricCard } from "@/components/MetricCard";
 import { Activity, Clock, FileText, BarChart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  
   const metrics = [
     {
       title: "Total Calls Today",
@@ -45,7 +48,8 @@ export default function Dashboard() {
       duration: "3m 45s",
       cost: "$0.12",
       status: "completed",
-      timestamp: "2 minutes ago"
+      timestamp: "2 minutes ago",
+      agent: "Customer Support Agent"
     },
     {
       id: "CALL-002",
@@ -53,7 +57,8 @@ export default function Dashboard() {
       duration: "7m 12s",
       cost: "$0.28",
       status: "completed",
-      timestamp: "5 minutes ago"
+      timestamp: "5 minutes ago",
+      agent: "Sales Agent"
     },
     {
       id: "CALL-003",
@@ -61,7 +66,8 @@ export default function Dashboard() {
       duration: "1m 23s",
       cost: "$0.05",
       status: "failed",
-      timestamp: "8 minutes ago"
+      timestamp: "8 minutes ago",
+      agent: "Technical Agent"
     },
     {
       id: "CALL-004",
@@ -69,7 +75,8 @@ export default function Dashboard() {
       duration: "5m 56s",
       cost: "$0.19",
       status: "completed",
-      timestamp: "12 minutes ago"
+      timestamp: "12 minutes ago",
+      agent: "Customer Support Agent"
     }
   ];
 
@@ -78,7 +85,7 @@ export default function Dashboard() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Overview</h1>
-        <p className="text-gray-600">Monitor your call analytics and performance metrics</p>
+        <p className="text-gray-600">Monitor your AI agent performance and call analytics</p>
       </div>
 
       {/* Metrics Grid */}
@@ -94,7 +101,10 @@ export default function Dashboard() {
         <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900">Recent Calls</h2>
-            <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+            <button 
+              onClick={() => navigate('/reports')}
+              className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+            >
               View All
             </button>
           </div>
@@ -116,6 +126,9 @@ export default function Dashboard() {
                   <div className="text-sm text-gray-500">
                     {call.duration} • {call.cost} • {call.timestamp}
                   </div>
+                  <div className="text-xs text-blue-600 mt-1">
+                    Agent: {call.agent}
+                  </div>
                 </div>
               </div>
             ))}
@@ -124,12 +137,12 @@ export default function Dashboard() {
 
         {/* Quick Stats */}
         <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Quick Stats</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">AI Agent Performance</h2>
           
           <div className="space-y-6">
             <div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600">Success Rate</span>
+                <span className="text-gray-600">Overall Success Rate</span>
                 <span className="font-semibold text-gray-900">94.2%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
@@ -147,19 +160,19 @@ export default function Dashboard() {
             
             <div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600">Average Wait Time</span>
-                <span className="font-semibold text-gray-900">23 seconds</span>
+                <span className="text-gray-600">Average Response Time</span>
+                <span className="font-semibold text-gray-900">0.8 seconds</span>
               </div>
-              <div className="text-sm text-gray-500">12% improvement from yesterday</div>
+              <div className="text-sm text-gray-500">AI agent response time</div>
             </div>
             
             <div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600">Credits Usage</span>
-                <span className="font-semibold text-gray-900">68%</span>
+                <span className="text-gray-600">Active Agents</span>
+                <span className="font-semibold text-gray-900">5</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full" style={{width: '68%'}}></div>
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full" style={{width: '100%'}}></div>
               </div>
             </div>
           </div>

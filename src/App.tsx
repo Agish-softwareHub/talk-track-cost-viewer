@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,6 +22,7 @@ import SentimentAnalysis from "./pages/SentimentAnalysis";
 import Performance from "./pages/Performance";
 import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
+import AIAgents from "./pages/AIAgents";
 
 const queryClient = new QueryClient();
 
@@ -36,11 +36,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/reports" element={<Reports />} />
-            <Route path="/details" element={<CallDetails />} />
-            <Route path="/transcripts" element={<Transcripts />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/queue" element={<CallQueue />} />
-            <Route path="/team" element={<TeamManagement />} />
             <Route path="/scheduler" element={<Scheduler />} />
             <Route path="/scoring" element={<CallScoring />} />
             <Route path="/sentiment" element={<SentimentAnalysis />} />
@@ -48,7 +45,7 @@ const App = () => (
             <Route path="/security" element={<Security />} />
             <Route path="/credits" element={<Credits />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="/ai-config" element={<AIConfiguration />} />
+            <Route path="/ai-agents" element={<AIAgents />} />
             <Route path="/google-integration" element={<GoogleIntegration />} />
             <Route path="/whatsapp-integration" element={<WhatsAppIntegration />} />
             <Route path="*" element={<NotFound />} />

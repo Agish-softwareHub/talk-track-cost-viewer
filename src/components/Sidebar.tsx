@@ -4,7 +4,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, 
   Activity, 
-  FileText, 
   Settings, 
   BarChart, 
   Clock,
@@ -14,7 +13,6 @@ import {
   Chrome,
   MessageCircle,
   TrendingUp,
-  Users,
   Phone,
   Calendar,
   Shield,
@@ -26,14 +24,11 @@ import {
 const menuItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard, color: "from-blue-500 to-cyan-500" },
   { title: "Call Reports", url: "/reports", icon: BarChart, color: "from-purple-500 to-pink-500" },
-  { title: "Call Details", url: "/details", icon: Activity, color: "from-green-500 to-emerald-500" },
-  { title: "Transcripts", url: "/transcripts", icon: FileText, color: "from-orange-500 to-red-500" },
   { title: "Analytics", url: "/analytics", icon: TrendingUp, color: "from-indigo-500 to-purple-500" },
   { title: "Call Queue", url: "/queue", icon: Phone, color: "from-teal-500 to-cyan-500" },
-  { title: "Team Management", url: "/team", icon: Users, color: "from-rose-500 to-pink-500" },
   { title: "Scheduler", url: "/scheduler", icon: Calendar, color: "from-amber-500 to-orange-500" },
   { title: "Usage & Credits", url: "/credits", icon: Clock, color: "from-violet-500 to-purple-500" },
-  { title: "AI Configuration", url: "/ai-config", icon: Bot, color: "from-emerald-500 to-teal-500" },
+  { title: "AI Agents", url: "/ai-agents", icon: Bot, color: "from-emerald-500 to-teal-500" },
   { title: "Call Scoring", url: "/scoring", icon: Target, color: "from-blue-500 to-indigo-500" },
   { title: "Sentiment Analysis", url: "/sentiment", icon: Brain, color: "from-pink-500 to-rose-500" },
   { title: "Performance", url: "/performance", icon: Zap, color: "from-yellow-500 to-orange-500" },
@@ -60,14 +55,14 @@ export function Sidebar() {
           {!collapsed && (
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                CallAnalytics
+                AI CallCenter
               </h1>
-              <p className="text-gray-500 text-sm mt-1">Advanced Dashboard</p>
+              <p className="text-gray-500 text-sm mt-1">Agent Management</p>
             </div>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-2 rounded-xl hover:bg-gray-100 transition-colors duration-200 border border-gray-200"
+            className="p-2 rounded-xl hover:bg-gray-100 transition-colors duration-200 border border-gray-200 flex-shrink-0"
           >
             {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>
@@ -87,10 +82,10 @@ export function Sidebar() {
                     : "hover:bg-gray-50 text-gray-700 hover:text-gray-900 hover:shadow-md"
                 }`}
               >
-                <div className={`flex items-center justify-center w-6 h-6 rounded-lg ${
+                <div className={`flex items-center justify-center ${collapsed ? 'w-8 h-8' : 'w-6 h-6'} rounded-lg ${
                   isActive(item.url) ? 'text-white' : `bg-gradient-to-r ${item.color} text-white`
                 } flex-shrink-0`}>
-                  <item.icon size={16} />
+                  <item.icon size={collapsed ? 20 : 16} />
                 </div>
                 {!collapsed && (
                   <span className="ml-4 font-medium text-sm">{item.title}</span>
@@ -114,8 +109,8 @@ export function Sidebar() {
         {!collapsed && (
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4">
             <div className="text-center">
-              <div className="text-xs text-gray-600 mb-1">Version 2.0.0</div>
-              <div className="text-xs text-gray-500">Pro Edition</div>
+              <div className="text-xs text-gray-600 mb-1">Version 3.0.0</div>
+              <div className="text-xs text-gray-500">AI Edition</div>
             </div>
           </div>
         )}

@@ -1,5 +1,5 @@
 
-import { Bell, Search, User, Settings, LogOut, MessageSquare } from "lucide-react";
+import { Search, User, Settings, LogOut, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,8 +10,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
 export function TopBar() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.toggle('dark');
+  };
+
   return (
     <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 px-6 py-4 sticky top-0 z-50">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
@@ -19,26 +28,24 @@ export function TopBar() {
         <div className="flex-1 max-w-md relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           <Input
-            placeholder="Search calls, transcripts, or contacts..."
+            placeholder="Search agents, calls, or reports..."
             className="pl-10 bg-gray-50/50 border-gray-200 focus:bg-white transition-colors"
           />
         </div>
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-4">
-          {/* Quick Actions */}
-          <Button variant="ghost" size="icon" className="relative">
-            <MessageSquare size={20} />
-            <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              3
-            </span>
-          </Button>
+          {/* Current Plan */}
+          <div className="flex items-center gap-2">
+            <Badge variant="default" className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+              Pro Plan
+            </Badge>
+            <span className="text-sm text-gray-600">8,492 credits</span>
+          </div>
 
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell size={20} />
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              7
-            </span>
+          {/* Dark Mode Toggle */}
+          <Button variant="ghost" size="icon" onClick={toggleDarkMode}>
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </Button>
 
           {/* User Menu */}
