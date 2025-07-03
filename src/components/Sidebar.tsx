@@ -9,7 +9,10 @@ import {
   BarChart, 
   Clock,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Bot,
+  Chrome,
+  MessageCircle
 } from "lucide-react";
 
 const menuItems = [
@@ -18,6 +21,9 @@ const menuItems = [
   { title: "Call Details", url: "/details", icon: Activity },
   { title: "Transcripts", url: "/transcripts", icon: FileText },
   { title: "Usage & Credits", url: "/credits", icon: Clock },
+  { title: "AI Configuration", url: "/ai-config", icon: Bot },
+  { title: "Google Integration", url: "/google-integration", icon: Chrome },
+  { title: "WhatsApp Integration", url: "/whatsapp-integration", icon: MessageCircle },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 

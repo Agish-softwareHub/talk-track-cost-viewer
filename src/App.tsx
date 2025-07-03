@@ -11,6 +11,9 @@ import CallDetails from "./pages/CallDetails";
 import Transcripts from "./pages/Transcripts";
 import Credits from "./pages/Credits";
 import Settings from "./pages/Settings";
+import AIConfiguration from "./pages/AIConfiguration";
+import GoogleIntegration from "./pages/GoogleIntegration";
+import WhatsAppIntegration from "./pages/WhatsAppIntegration";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +32,9 @@ const App = () => (
             <Route path="/transcripts" element={<Transcripts />} />
             <Route path="/credits" element={<Credits />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/ai-config" element={<AIConfiguration />} />
+            <Route path="/google-integration" element={<GoogleIntegration />} />
+            <Route path="/whatsapp-integration" element={<WhatsAppIntegration />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
