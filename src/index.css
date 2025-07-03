@@ -1,4 +1,5 @@
 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -144,31 +145,3 @@ All colors MUST be HSL.
   }
 }
 
-/* Smooth transitions for dark mode */
-.dark .bg-white {
-  @apply bg-gray-900;
-}
-
-.dark .text-gray-900 {
-  @apply text-gray-100;
-}
-
-.dark .text-gray-700 {
-  @apply text-gray-300;
-}
-
-.dark .text-gray-600 {
-  @apply text-gray-400;
-}
-
-.dark .text-gray-500 {
-  @apply text-gray-500;
-}
-
-.dark .border-gray-200 {
-  @apply border-gray-700;
-}
-
-.dark .bg-gray-50 {
-  @apply bg-gray-800;
-}
