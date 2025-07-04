@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Bot, Save, Plus, Edit, Trash2, Tag, Building2, Star, Activity, Clock, Zap, Brain, Settings as SettingsIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +24,15 @@ interface AIAgent {
   averageScore: number;
   lastUsed: string;
 }
+
+type DepartmentColors = {
+  Support: string;
+  Sales: string;
+  Technical: string;
+  Billing: string;
+  General: string;
+  [key: string]: string;
+};
 
 export default function AIAgents() {
   const [agents, setAgents] = useState<AIAgent[]>([
@@ -155,8 +163,8 @@ export default function AIAgents() {
     setSelectedAgent(updatedAgent);
   };
 
-  const getDepartmentColor = (department: string) => {
-    const colors = {
+  const getDepartmentColor = (department: string): string => {
+    const colors: DepartmentColors = {
       Support: "from-blue-500 to-cyan-500",
       Sales: "from-green-500 to-emerald-500",
       Technical: "from-purple-500 to-violet-500",

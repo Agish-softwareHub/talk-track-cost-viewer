@@ -7,14 +7,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Customer } from "@/types/customers";
+
+interface Opportunity {
+  id: string;
+  customerName: string;
+  title: string;
+  value: string;
+  stage: string;
+  probability: number;
+  closeDate: string;
+  lastActivity: string;
+}
 
 export default function CustomerCRM() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortBy, setSortBy] = useState("name");
 
-  const customers = [
+  const customers: Customer[] = [
     {
       id: "CUST001",
       name: "John Anderson",
@@ -28,14 +40,13 @@ export default function CustomerCRM() {
       totalCalls: 8,
       totalSpent: "$12,450",
       satisfaction: 4.8,
-      tags: ["vip", "enterprise", "technical"],
-      notes: "Prefers AI agents for technical support, high satisfaction with automated responses",
       avatar: "JA",
       joinDate: "2023-03-15",
+      notes: "Prefers AI agents for technical support, high satisfaction with automated responses",
       callHistory: [
-        { date: "2024-01-15", type: "Support", duration: "12m", outcome: "Resolved", agent: "AI Agent Alpha" },
-        { date: "2024-01-10", type: "Sales", duration: "8m", outcome: "Follow-up", agent: "AI Agent Beta" },
-        { date: "2024-01-05", type: "Technical", duration: "25m", outcome: "Escalated", agent: "AI Agent Gamma" }
+        { id: "1", date: "2024-01-15", type: "Support", duration: "12m", outcome: "Resolved" },
+        { id: "2", date: "2024-01-10", type: "Sales", duration: "8m", outcome: "Follow-up" },
+        { id: "3", date: "2024-01-05", type: "Technical", duration: "25m", outcome: "Escalated" }
       ]
     },
     {
@@ -51,13 +62,12 @@ export default function CustomerCRM() {
       totalCalls: 15,
       totalSpent: "$5,280",
       satisfaction: 4.2,
-      tags: ["creative", "recurring"],
-      notes: "Frequent user, prefers quick AI responses for routine inquiries",
       avatar: "SM",
       joinDate: "2023-08-22",
+      notes: "Frequent user, prefers quick AI responses for routine inquiries",
       callHistory: [
-        { date: "2024-01-12", type: "Billing", duration: "6m", outcome: "Resolved", agent: "AI Agent Delta" },
-        { date: "2024-01-08", type: "Support", duration: "15m", outcome: "Resolved", agent: "AI Agent Alpha" }
+        { id: "1", date: "2024-01-12", type: "Billing", duration: "6m", outcome: "Resolved" },
+        { id: "2", date: "2024-01-08", type: "Support", duration: "15m", outcome: "Resolved" }
       ]
     },
     {
@@ -73,13 +83,12 @@ export default function CustomerCRM() {
       totalCalls: 3,
       totalSpent: "$890",
       satisfaction: 3.9,
-      tags: ["startup", "potential"],
-      notes: "New to AI call agents, showing high interest in automation features",
       avatar: "MC",
       joinDate: "2024-01-01",
+      notes: "New to AI call agents, showing high interest in automation features",
       callHistory: [
-        { date: "2024-01-14", type: "Sales", duration: "22m", outcome: "Interested", agent: "AI Agent Beta" },
-        { date: "2024-01-02", type: "Onboarding", duration: "18m", outcome: "Completed", agent: "AI Agent Support" }
+        { id: "1", date: "2024-01-14", type: "Sales", duration: "22m", outcome: "Interested" },
+        { id: "2", date: "2024-01-02", type: "Onboarding", duration: "18m", outcome: "Completed" }
       ]
     },
     {
@@ -95,18 +104,17 @@ export default function CustomerCRM() {
       totalCalls: 22,
       totalSpent: "$18,900",
       satisfaction: 4.6,
-      tags: ["consulting", "high-value"],
-      notes: "Previously active, satisfied with AI agent efficiency but needs re-engagement",
       avatar: "LR",
       joinDate: "2022-11-10",
+      notes: "Previously active, satisfied with AI agent efficiency but needs re-engagement",
       callHistory: [
-        { date: "2023-12-20", type: "Support", duration: "9m", outcome: "Resolved", agent: "AI Agent Alpha" },
-        { date: "2023-12-15", type: "Account Review", duration: "35m", outcome: "Renewed", agent: "AI Agent Premium" }
+        { id: "1", date: "2023-12-20", type: "Support", duration: "9m", outcome: "Resolved" },
+        { id: "2", date: "2023-12-15", type: "Account Review", duration: "35m", outcome: "Renewed" }
       ]
     }
   ];
 
-  const opportunities = [
+  const opportunities: Opportunity[] = [
     {
       id: "OPP001",
       customerName: "Michael Chen",
@@ -163,7 +171,7 @@ export default function CustomerCRM() {
     }
   });
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string): string => {
     switch (status) {
       case "active": return "bg-green-100 text-green-800";
       case "potential": return "bg-blue-100 text-blue-800";
@@ -172,7 +180,7 @@ export default function CustomerCRM() {
     }
   };
 
-  const getTierColor = (tier) => {
+  const getTierColor = (tier: string): string => {
     switch (tier) {
       case "premium": return "bg-purple-100 text-purple-800";
       case "standard": return "bg-blue-100 text-blue-800";
@@ -419,7 +427,6 @@ export default function CustomerCRM() {
                             <div className="text-sm space-y-1">
                               <div className="flex justify-between">
                                 <span>Duration: {call.duration}</span>
-                                <span>Agent: {call.agent}</span>
                               </div>
                               <div>
                                 <Badge variant={call.outcome === "Resolved" ? "default" : "secondary"} className="text-xs">
