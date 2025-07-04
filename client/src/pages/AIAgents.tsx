@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,8 +42,9 @@ export default function AIAgents() {
         begin_message: ""
       });
       refetch();
-    } catch (error) {
-      toast.error(`Failed to create agent: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error(`Failed to create agent: ${errorMessage}`);
     }
   };
 
@@ -54,8 +54,9 @@ export default function AIAgents() {
         await retellService.deleteAgent(agentId);
         toast.success("Agent deleted successfully");
         refetch();
-      } catch (error) {
-        toast.error(`Failed to delete agent: ${error.message}`);
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        toast.error(`Failed to delete agent: ${errorMessage}`);
       }
     }
   };

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,8 +45,9 @@ export default function PhoneNumbers() {
         await retellService.deletePhoneNumber(phoneNumber);
         toast.success("Phone number deleted successfully");
         refetchNumbers();
-      } catch (error) {
-        toast.error(`Failed to delete phone number: ${error.message}`);
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        toast.error(`Failed to delete phone number: ${errorMessage}`);
       }
     }
   };
@@ -59,8 +59,9 @@ export default function PhoneNumbers() {
       });
       toast.success("Agent assigned successfully");
       refetchNumbers();
-    } catch (error) {
-      toast.error(`Failed to assign agent: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error(`Failed to assign agent: ${errorMessage}`);
     }
   };
 
