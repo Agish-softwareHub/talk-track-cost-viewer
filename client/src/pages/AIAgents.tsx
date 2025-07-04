@@ -79,7 +79,7 @@ export default function AIAgents() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-4">AI Agents Management</h1>
-            <p className="text-blue-100 text-lg">Configure and manage your Retell AI agents</p>
+            <p className="text-blue-100 text-lg">Configure and manage your AI agents</p>
           </div>
           <div className="text-center">
             <div className="text-4xl font-bold mb-2">{agents?.length || 0}</div>
