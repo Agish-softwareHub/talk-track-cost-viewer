@@ -1,6 +1,6 @@
 
 const RETELL_API_KEY = 'key_c268a85876e43b9fa1f42662b910';
-const RETELL_BASE_URL = 'https://api.retellai.com/v2';
+const RETELL_BASE_URL = 'https://api.retellai.com/';
 
 export interface RetellAgent {
   agent_id: string;
@@ -70,11 +70,8 @@ class RetellService {
   private async makeRequest(endpoint: string, options: RequestInit = {}) {
     const url = `${this.baseURL}${endpoint}`;
     const response = await fetch(url, {
-      ...options,
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-        ...options.headers,
       },
     });
 
@@ -87,30 +84,30 @@ class RetellService {
 
   // Agent Management
   async getAgents(): Promise<RetellAgent[]> {
-    const response = await this.makeRequest('/agent');
+    const response = await this.makeRequest('list-agents');
     return response.agents || [];
   }
 
   async getAgent(agentId: string): Promise<RetellAgent> {
-    return this.makeRequest(`/agent/${agentId}`);
+    return this.makeRequest(`/get-agent/${agentId}`);
   }
 
   async createAgent(agentData: Partial<RetellAgent>): Promise<RetellAgent> {
-    return this.makeRequest('/agent', {
+    return this.makeRequest('/create-agent', {
       method: 'POST',
       body: JSON.stringify(agentData),
     });
   }
 
   async updateAgent(agentId: string, agentData: Partial<RetellAgent>): Promise<RetellAgent> {
-    return this.makeRequest(`/agent/${agentId}`, {
+    return this.makeRequest(`/update-agent/${agentId}`, {
       method: 'PATCH',
       body: JSON.stringify(agentData),
     });
   }
 
   async deleteAgent(agentId: string): Promise<void> {
-    await this.makeRequest(`/agent/${agentId}`, {
+    await this.makeRequest(`/delete-agent/${agentId}`, {
       method: 'DELETE',
     });
   }
@@ -138,23 +135,23 @@ class RetellService {
 
   // Phone Number Management
   async getPhoneNumbers(): Promise<RetellPhoneNumber[]> {
-    const response = await this.makeRequest('/phone-number');
+    const response = await this.makeRequest('/list-phone-numbers');
     return response.phone_numbers || [];
   }
 
   async getPhoneNumber(phoneNumber: string): Promise<RetellPhoneNumber> {
-    return this.makeRequest(`/phone-number/${phoneNumber}`);
+    return this.makeRequest(`/get-phone-number/${phoneNumber}`);
   }
 
   async updatePhoneNumber(phoneNumber: string, data: Partial<RetellPhoneNumber>): Promise<RetellPhoneNumber> {
-    return this.makeRequest(`/phone-number/${phoneNumber}`, {
+    return this.makeRequest(`/update-phone-number/${phoneNumber}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
     });
   }
 
   async buyPhoneNumber(areaCode: string, agentId?: string): Promise<RetellPhoneNumber> {
-    return this.makeRequest('/phone-number', {
+    return this.makeRequest('/buy-phone-number', {
       method: 'POST',
       body: JSON.stringify({
         area_code: areaCode,
@@ -164,7 +161,7 @@ class RetellService {
   }
 
   async deletePhoneNumber(phoneNumber: string): Promise<void> {
-    await this.makeRequest(`/phone-number/${phoneNumber}`, {
+    await this.makeRequest(`/delete-phone-number/${phoneNumber}`, {
       method: 'DELETE',
     });
   }
