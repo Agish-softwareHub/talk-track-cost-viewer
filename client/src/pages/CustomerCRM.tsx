@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { Users, Search, Plus, Phone, Mail, MapPin, Calendar, Star, Edit, Trash2, Eye, MessageSquare, Filter, ArrowUpDown } from "lucide-react";
+import { Users, Search, Plus, Phone, Mail, MapPin, Calendar, Star, Edit, Trash2, Eye, MessageSquare, Filter, ArrowUpDown, Bot, Zap, Brain, TrendingUp, Clock, Target, AlertCircle, CheckCircle2, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
 import { Customer } from "@/types/customers";
 
 interface Opportunity {
@@ -18,6 +20,16 @@ interface Opportunity {
   probability: number;
   closeDate: string;
   lastActivity: string;
+  aiRecommendation?: string;
+}
+
+interface AIInsight {
+  type: 'opportunity' | 'risk' | 'satisfaction' | 'engagement';
+  title: string;
+  description: string;
+  priority: 'high' | 'medium' | 'low';
+  customerId: string;
+  action?: string;
 }
 
 export default function CustomerCRM() {
@@ -118,6 +130,33 @@ export default function CustomerCRM() {
     }
   ];
 
+  const aiInsights: AIInsight[] = [
+    {
+      type: 'opportunity',
+      title: 'Upsell Opportunity',
+      description: 'John Anderson has been using basic features heavily. Consider premium upgrade.',
+      priority: 'high',
+      customerId: 'CUST001',
+      action: 'Schedule demo call'
+    },
+    {
+      type: 'risk',
+      title: 'Churn Risk',
+      description: 'Lisa Rodriguez has been inactive for 25 days. Previous high-value customer.',
+      priority: 'high',
+      customerId: 'CUST004',
+      action: 'Send re-engagement campaign'
+    },
+    {
+      type: 'satisfaction',
+      title: 'High Satisfaction',
+      description: 'Sarah Mitchell consistently rates AI interactions 5 stars.',
+      priority: 'medium',
+      customerId: 'CUST002',
+      action: 'Request testimonial'
+    }
+  ];
+
   const opportunities: Opportunity[] = [
     {
       id: "OPP001",
@@ -127,7 +166,8 @@ export default function CustomerCRM() {
       stage: "Negotiation",
       probability: 75,
       closeDate: "2024-02-15",
-      lastActivity: "Demo scheduled"
+      lastActivity: "Demo scheduled",
+      aiRecommendation: "Customer showed 80% engagement in premium features demo"
     },
     {
       id: "OPP002",
@@ -137,7 +177,8 @@ export default function CustomerCRM() {
       stage: "Proposal",
       probability: 60,
       closeDate: "2024-03-01",
-      lastActivity: "Proposal sent"
+      lastActivity: "Proposal sent",
+      aiRecommendation: "High API usage suggests need for enterprise tier"
     },
     {
       id: "OPP003",
@@ -147,7 +188,8 @@ export default function CustomerCRM() {
       stage: "Discovery",
       probability: 40,
       closeDate: "2024-02-28",
-      lastActivity: "Needs assessment"
+      lastActivity: "Needs assessment",
+      aiRecommendation: "Similar companies typically convert within 30 days"
     }
   ];
 
@@ -193,41 +235,111 @@ export default function CustomerCRM() {
     }
   };
 
+  const getInsightIcon = (type: string) => {
+    switch (type) {
+      case 'opportunity': return TrendingUp;
+      case 'risk': return AlertCircle;
+      case 'satisfaction': return Star;
+      case 'engagement': return Activity;
+      default: return Target;
+    }
+  };
+
+  const getInsightColor = (type: string) => {
+    switch (type) {
+      case 'opportunity': return 'bg-green-100 text-green-800 border-green-200';
+      case 'risk': return 'bg-red-100 text-red-800 border-red-200';
+      case 'satisfaction': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'engagement': return 'bg-blue-100 text-blue-800 border-blue-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Customer CRM</h1>
-            <p className="text-blue-100">Manage customer relationships and track interactions</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold">{customers.length}</div>
-              <div className="text-blue-100">Total Customers</div>
+      {/* AI-Enhanced Header */}
+      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl p-6 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute top-4 right-4">
+          <Bot className="h-12 w-12 text-white/30" />
+        </div>
+        <div className="relative">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+                <Brain className="h-8 w-8" />
+                AI-Powered Customer CRM
+              </h1>
+              <p className="text-blue-100">Intelligent customer insights powered by AI agents</p>
             </div>
-            <Button className="bg-white/20 hover:bg-white/30 text-white border-white/30">
-              <Plus size={16} className="mr-2" />
-              Add Customer
-            </Button>
+            <div className="flex items-center gap-6">
+              <div className="text-center">
+                <div className="text-2xl font-bold">{customers.length}</div>
+                <div className="text-blue-100 text-sm">Total Customers</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold">{aiInsights.length}</div>
+                <div className="text-blue-100 text-sm">AI Insights</div>
+              </div>
+              <Button className="bg-white/20 hover:bg-white/30 text-white border-white/30">
+                <Plus size={16} className="mr-2" />
+                Add Customer
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* AI Insights Dashboard */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {aiInsights.map((insight, index) => {
+          const IconComponent = getInsightIcon(insight.type);
+          return (
+            <Card key={index} className={`border-l-4 ${getInsightColor(insight.type)} hover:shadow-lg transition-shadow`}>
+              <CardContent className="p-4">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-white/50">
+                    <IconComponent className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-sm mb-1">{insight.title}</h3>
+                    <p className="text-xs text-gray-600 mb-2">{insight.description}</p>
+                    {insight.action && (
+                      <Button size="sm" variant="outline" className="text-xs h-7">
+                        <Zap className="h-3 w-3 mr-1" />
+                        {insight.action}
+                      </Button>
+                    )}
+                  </div>
+                  <Badge variant={insight.priority === 'high' ? 'destructive' : 'secondary'} className="text-xs">
+                    {insight.priority}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Enhanced Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: "Active Customers", value: customers.filter(c => c.status === "active").length, color: "green" },
-          { label: "Premium Tier", value: customers.filter(c => c.tier === "premium").length, color: "purple" },
-          { label: "Avg Satisfaction", value: "4.4/5", color: "yellow" },
-          { label: "Total Revenue", value: "$37.5K", color: "blue" }
+          { label: "Active Customers", value: customers.filter(c => c.status === "active").length, color: "green", icon: Users },
+          { label: "AI Resolution Rate", value: "94%", color: "blue", icon: Bot },
+          { label: "Avg Satisfaction", value: "4.4/5", color: "yellow", icon: Star },
+          { label: "Response Time", value: "0.8s", color: "purple", icon: Zap },
+          { label: "Total Revenue", value: "$37.5K", color: "green", icon: TrendingUp }
         ].map((stat, index) => (
-          <Card key={index}>
+          <Card key={index} className="hover:shadow-md transition-shadow">
             <CardContent className="p-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                <div className="text-sm text-gray-600">{stat.label}</div>
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg bg-${stat.color}-100`}>
+                  <stat.icon className={`h-5 w-5 text-${stat.color}-600`} />
+                </div>
+                <div>
+                  <div className="text-xl font-bold text-gray-900">{stat.value}</div>
+                  <div className="text-xs text-gray-600">{stat.label}</div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -235,14 +347,15 @@ export default function CustomerCRM() {
       </div>
 
       <Tabs defaultValue="customers" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="customers">Customers</TabsTrigger>
           <TabsTrigger value="opportunities">Opportunities</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="insights">AI Insights</TabsTrigger>
+          <TabsTrigger value="automation">Automation</TabsTrigger>
         </TabsList>
 
         <TabsContent value="customers" className="space-y-6">
-          {/* Search and Filters */}
+          {/* Enhanced Search and Filters */}
           <Card>
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row gap-4">
@@ -277,31 +390,38 @@ export default function CustomerCRM() {
                     <SelectItem value="satisfaction">Satisfaction</SelectItem>
                   </SelectContent>
                 </Select>
+                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                  <Bot className="mr-2 h-4 w-4" />
+                  AI Analyze
+                </Button>
               </div>
             </CardContent>
           </Card>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Customer List */}
+            {/* Enhanced Customer List */}
             <div className="lg:col-span-2 space-y-4">
               {sortedCustomers.map((customer) => (
                 <Card 
                   key={customer.id} 
-                  className={`hover:shadow-lg transition-shadow cursor-pointer ${
-                    selectedCustomer?.id === customer.id ? 'ring-2 ring-blue-500' : ''
-                  }`}
+                  className={`hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 ${
+                    selectedCustomer?.id === customer.id ? 'ring-2 ring-blue-500 border-l-blue-500' : 'border-l-transparent'
+                  } ${customer.status === 'inactive' ? 'bg-gray-50' : ''}`}
                   onClick={() => setSelectedCustomer(customer)}
                 >
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-4">
                         <Avatar className="h-12 w-12">
-                          <AvatarFallback className="bg-blue-100 text-blue-600">
+                          <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold">
                             {customer.avatar}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <h3 className="font-semibold text-gray-900">{customer.name}</h3>
+                          <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                            {customer.name}
+                            {customer.satisfaction > 4.5 && <Star className="h-4 w-4 text-yellow-500 fill-current" />}
+                          </h3>
                           <p className="text-sm text-gray-600">{customer.company}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <Badge className={getStatusColor(customer.status)}>
@@ -310,43 +430,60 @@ export default function CustomerCRM() {
                             <Badge className={getTierColor(customer.tier)}>
                               {customer.tier}
                             </Badge>
+                            {customer.tags.includes('automation') && (
+                              <Badge variant="outline" className="text-purple-600 border-purple-200">
+                                <Bot className="h-3 w-3 mr-1" />
+                                AI Preferred
+                              </Badge>
+                            )}
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-1">
-                          <Star className="text-yellow-500" size={14} />
-                          <span className="text-sm">{customer.satisfaction}</span>
+                        <div className="text-center">
+                          <div className="flex items-center gap-1 text-sm">
+                            <Star className="text-yellow-500 h-4 w-4" />
+                            <span className="font-medium">{customer.satisfaction}</span>
+                          </div>
+                          <div className="text-xs text-gray-500">Satisfaction</div>
                         </div>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" className="text-green-600 hover:bg-green-50">
                           <Phone size={14} />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" className="text-blue-600 hover:bg-blue-50">
                           <Mail size={14} />
+                        </Button>
+                        <Button variant="ghost" size="sm" className="text-purple-600 hover:bg-purple-50">
+                          <Bot size={14} />
                         </Button>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-3">
                       <div>
                         <span className="text-gray-600">Total Calls:</span>
-                        <div className="font-medium">{customer.totalCalls}</div>
+                        <div className="font-medium flex items-center gap-1">
+                          {customer.totalCalls}
+                          {customer.totalCalls > 10 && <TrendingUp className="h-3 w-3 text-green-500" />}
+                        </div>
                       </div>
                       <div>
                         <span className="text-gray-600">Total Spent:</span>
-                        <div className="font-medium">{customer.totalSpent}</div>
+                        <div className="font-medium text-green-600">{customer.totalSpent}</div>
                       </div>
                       <div>
                         <span className="text-gray-600">Last Contact:</span>
                         <div className="font-medium">{customer.lastContact}</div>
                       </div>
                       <div>
-                        <span className="text-gray-600">Location:</span>
-                        <div className="font-medium">{customer.location}</div>
+                        <span className="text-gray-600">AI Interactions:</span>
+                        <div className="font-medium text-purple-600">
+                          {Math.floor(customer.totalCalls * 0.7)}
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-1 mt-3">
+                    <div className="flex flex-wrap gap-1">
                       {customer.tags.map((tag: string, index: number) => (
                         <Badge key={index} variant="secondary" className="text-xs">
                           {tag}
@@ -358,7 +495,7 @@ export default function CustomerCRM() {
               ))}
             </div>
 
-            {/* Customer Details */}
+            {/* Enhanced Customer Details */}
             <div className="space-y-4">
               {selectedCustomer ? (
                 <>
@@ -366,18 +503,37 @@ export default function CustomerCRM() {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <Users className="text-blue-600" size={20} />
-                        Customer Details
+                        Customer Profile
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="text-center">
                         <Avatar className="h-16 w-16 mx-auto mb-3">
-                          <AvatarFallback className="bg-blue-100 text-blue-600 text-lg">
+                          <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-lg font-bold">
                             {selectedCustomer.avatar}
                           </AvatarFallback>
                         </Avatar>
                         <h3 className="font-semibold text-lg">{selectedCustomer.name}</h3>
                         <p className="text-gray-600">{selectedCustomer.company}</p>
+                        
+                        {/* AI Preference Indicator */}
+                        {selectedCustomer.tags.includes('automation') && (
+                          <Badge className="mt-2 bg-purple-100 text-purple-800">
+                            <Bot className="h-3 w-3 mr-1" />
+                            AI Agent Preferred
+                          </Badge>
+                        )}
+                      </div>
+
+                      {/* Customer Score */}
+                      <div className="bg-gray-50 rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium">Customer Health Score</span>
+                          <span className="text-sm font-bold text-green-600">
+                            {Math.round(selectedCustomer.satisfaction * 20)}%
+                          </span>
+                        </div>
+                        <Progress value={selectedCustomer.satisfaction * 20} className="h-2" />
                       </div>
 
                       <div className="space-y-3 text-sm">
@@ -400,14 +556,19 @@ export default function CustomerCRM() {
                       </div>
 
                       <div className="pt-4 border-t">
-                        <h4 className="font-medium mb-2">Notes</h4>
-                        <p className="text-sm text-gray-700">{selectedCustomer.notes}</p>
+                        <h4 className="font-medium mb-2">AI Agent Notes</h4>
+                        <p className="text-sm text-gray-700 bg-blue-50 p-3 rounded-lg">
+                          {selectedCustomer.notes}
+                        </p>
                       </div>
 
                       <div className="flex gap-2">
-                        <Button size="sm" className="flex-1">
-                          <Edit size={14} className="mr-2" />
-                          Edit
+                        <Button size="sm" className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600">
+                          <Bot size={14} className="mr-2" />
+                          AI Chat
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Edit size={14} />
                         </Button>
                         <Button variant="outline" size="sm">
                           <MessageSquare size={14} />
@@ -416,27 +577,46 @@ export default function CustomerCRM() {
                     </CardContent>
                   </Card>
 
+                  {/* AI-Enhanced Call History */}
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Recent Call History</CardTitle>
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Activity className="text-purple-600" size={18} />
+                        AI Interaction History
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
                         {selectedCustomer.callHistory.map((call, index) => (
-                          <div key={index} className="p-3 border border-gray-200 rounded-lg">
+                          <div key={index} className="p-3 border border-gray-200 rounded-lg bg-gradient-to-r from-gray-50 to-blue-50">
                             <div className="flex items-center justify-between mb-2">
-                              <Badge variant="outline">{call.type}</Badge>
+                              <div className="flex items-center gap-2">
+                                <Badge variant="outline" className="flex items-center gap-1">
+                                  {call.type === "Support" && <Bot className="h-3 w-3" />}
+                                  {call.type}
+                                </Badge>
+                                {call.outcome === "Resolved" && (
+                                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                                )}
+                              </div>
                               <span className="text-xs text-gray-500">{call.date}</span>
                             </div>
                             <div className="text-sm space-y-1">
                               <div className="flex justify-between">
                                 <span>Duration: {call.duration}</span>
-                              </div>
-                              <div>
-                                <Badge variant={call.outcome === "Resolved" ? "default" : "secondary"} className="text-xs">
+                                <Badge 
+                                  variant={call.outcome === "Resolved" ? "default" : "secondary"} 
+                                  className="text-xs"
+                                >
                                   {call.outcome}
                                 </Badge>
                               </div>
+                              {call.type === "Support" && (
+                                <div className="text-xs text-purple-600 bg-purple-50 p-2 rounded mt-2">
+                                  <Bot className="h-3 w-3 inline mr-1" />
+                                  Handled by AI Agent - High satisfaction score
+                                </div>
+                              )}
                             </div>
                           </div>
                         ))}
@@ -447,8 +627,8 @@ export default function CustomerCRM() {
               ) : (
                 <Card>
                   <CardContent className="p-8 text-center text-gray-500">
-                    <Users size={48} className="mx-auto mb-4 text-gray-300" />
-                    <p>Select a customer to view details</p>
+                    <Bot size={48} className="mx-auto mb-4 text-gray-300" />
+                    <p>Select a customer to view AI-powered insights</p>
                   </CardContent>
                 </Card>
               )}
@@ -459,30 +639,55 @@ export default function CustomerCRM() {
         <TabsContent value="opportunities" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Sales Opportunities</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="text-green-600" />
+                AI-Identified Sales Opportunities
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {opportunities.map((opportunity) => (
-                  <div key={opportunity.id} className="p-4 border border-gray-200 rounded-lg">
+                  <div key={opportunity.id} className="p-4 border border-gray-200 rounded-lg bg-gradient-to-r from-green-50 to-blue-50">
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="font-semibold text-gray-900">{opportunity.title}</h3>
+                        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                          {opportunity.title}
+                          <Zap className="h-4 w-4 text-yellow-500" />
+                        </h3>
                         <p className="text-sm text-gray-600">{opportunity.customerName}</p>
                       </div>
                       <div className="text-right">
-                        <div className="font-semibold text-green-600">{opportunity.value}</div>
+                        <div className="font-semibold text-green-600 text-lg">{opportunity.value}</div>
                         <div className="text-sm text-gray-500">{opportunity.probability}% probability</div>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <Badge variant="outline">{opportunity.stage}</Badge>
+                    <div className="flex items-center justify-between mb-3">
+                      <Badge variant="outline" className="border-green-300 text-green-700">
+                        {opportunity.stage}
+                      </Badge>
                       <div className="text-sm text-gray-600">
                         Close: {opportunity.closeDate}
                       </div>
                     </div>
-                    <div className="mt-2 text-sm text-gray-700">
+                    <div className="text-sm text-gray-700 mb-2">
                       Last activity: {opportunity.lastActivity}
+                    </div>
+                    {opportunity.aiRecommendation && (
+                      <div className="bg-purple-50 border border-purple-200 rounded p-3 mt-3">
+                        <div className="flex items-center gap-2 text-purple-700 text-sm">
+                          <Brain className="h-4 w-4" />
+                          <strong>AI Insight:</strong> {opportunity.aiRecommendation}
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex gap-2 mt-3">
+                      <Button size="sm" className="bg-gradient-to-r from-green-600 to-blue-600">
+                        <Bot className="h-3 w-3 mr-1" />
+                        AI Follow-up
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        View Details
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -491,70 +696,98 @@ export default function CustomerCRM() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="analytics" className="space-y-4">
+        <TabsContent value="insights" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Customer Distribution</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="text-purple-600" />
+                  AI Performance Metrics
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {["Active", "Potential", "Inactive"].map((status) => {
-                    const count = customers.filter(c => c.status === status.toLowerCase()).length;
-                    const percentage = (count / customers.length) * 100;
-                    return (
-                      <div key={status} className="flex items-center justify-between">
-                        <span className="text-sm">{status}</span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-20 bg-gray-200 rounded-full h-2">
-                            <div 
-                              className={`h-2 rounded-full ${
-                                status === "Active" ? "bg-green-500" :
-                                status === "Potential" ? "bg-blue-500" : "bg-gray-500"
-                              }`}
-                              style={{ width: `${percentage}%` }}
-                            />
-                          </div>
-                          <span className="text-sm font-medium">{count}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">AI Resolution Rate</span>
+                    <div className="flex items-center gap-2">
+                      <Progress value={94} className="w-20 h-2" />
+                      <span className="text-sm font-bold">94%</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Customer Satisfaction</span>
+                    <div className="flex items-center gap-2">
+                      <Progress value={88} className="w-20 h-2" />
+                      <span className="text-sm font-bold">4.4/5</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Response Time</span>
+                    <div className="flex items-center gap-2">
+                      <Progress value={96} className="w-20 h-2" />
+                      <span className="text-sm font-bold">0.8s</span>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Tier Distribution</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="text-blue-600" />
+                  Customer Preferences
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {["Premium", "Standard", "Basic"].map((tier) => {
-                    const count = customers.filter(c => c.tier === tier.toLowerCase()).length;
-                    const percentage = (count / customers.length) * 100;
-                    return (
-                      <div key={tier} className="flex items-center justify-between">
-                        <span className="text-sm">{tier}</span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-20 bg-gray-200 rounded-full h-2">
-                            <div 
-                              className={`h-2 rounded-full ${
-                                tier === "Premium" ? "bg-purple-500" :
-                                tier === "Standard" ? "bg-blue-500" : "bg-gray-500"
-                              }`}
-                              style={{ width: `${percentage}%` }}
-                            />
-                          </div>
-                          <span className="text-sm font-medium">{count}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Prefer AI Agents</span>
+                    <Badge className="bg-green-100 text-green-800">68%</Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Quick Response Priority</span>
+                    <Badge className="bg-blue-100 text-blue-800">84%</Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Self-Service Options</span>
+                    <Badge className="bg-purple-100 text-purple-800">72%</Badge>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        <TabsContent value="automation" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="text-yellow-600" />
+                AI Automation Tools
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button className="h-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white flex-col gap-2">
+                  <Bot className="h-6 w-6" />
+                  <span>Auto-assign AI Agents</span>
+                </Button>
+                <Button className="h-20 bg-gradient-to-r from-green-600 to-teal-600 text-white flex-col gap-2">
+                  <TrendingUp className="h-6 w-6" />
+                  <span>Predictive Lead Scoring</span>
+                </Button>
+                <Button className="h-20 bg-gradient-to-r from-purple-600 to-pink-600 text-white flex-col gap-2">
+                  <MessageSquare className="h-6 w-6" />
+                  <span>Smart Follow-up Campaigns</span>
+                </Button>
+                <Button className="h-20 bg-gradient-to-r from-orange-600 to-red-600 text-white flex-col gap-2">
+                  <AlertCircle className="h-6 w-6" />
+                  <span>Churn Prevention AI</span>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

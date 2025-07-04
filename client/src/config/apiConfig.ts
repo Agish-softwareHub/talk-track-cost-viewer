@@ -9,7 +9,12 @@ export const API_CONFIG = {
     SENTIMENT: '/sentiment',
     SENTIMENT_ANALYSIS: '/sentiment/analysis',
     SENTIMENT_TRENDS: '/sentiment/trends',
-    SENTIMENT_INSIGHTS: '/sentiment/insights'
+    SENTIMENT_INSIGHTS: '/sentiment/insights',
+    AI_AGENTS: '/agents',
+    ANALYTICS: '/analytics',
+    CUSTOMERS: '/customers',
+    QUEUE: '/queue',
+    REPORTS: '/reports'
   }
 };
 
