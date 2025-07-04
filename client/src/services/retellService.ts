@@ -1,6 +1,6 @@
 
 const RETELL_API_KEY = 'key_c268a85876e43b9fa1f42662b910';
-const RETELL_BASE_URL = 'https://api.retellai.com/';
+const RETELL_BASE_URL = 'https://api.retellai.com';
 
 export interface RetellAgent {
   agent_id: string;
@@ -84,7 +84,7 @@ class RetellService {
 
   // Agent Management
   async getAgents(): Promise<RetellAgent[]> {
-    const response = await this.makeRequest('list-agents');
+    const response = await this.makeRequest('/list-agents');
     return response.agents || [];
   }
 
@@ -119,15 +119,15 @@ class RetellService {
       ...(pagination_key && { pagination_key }),
     });
     
-    return this.makeRequest(`/call?${params}`);
+    return this.makeRequest(`/v2/list-calls?${params}`);
   }
 
   async getCall(callId: string): Promise<RetellCall> {
-    return this.makeRequest(`/call/${callId}`);
+    return this.makeRequest(`/v2/get-call/${callId}`);
   }
 
   async createCall(callData: CreateCallRequest): Promise<CreateCallResponse> {
-    return this.makeRequest('/call', {
+    return this.makeRequest('/v2/create-call', {
       method: 'POST',
       body: JSON.stringify(callData),
     });
