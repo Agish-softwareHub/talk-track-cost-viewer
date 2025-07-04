@@ -68,7 +68,7 @@ export function TopBar() {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-red-600">
-                <LogOut className="mr-2 h-4 w-4" />
+                <LogOut href='/' className="mr-2 h-4 w-4" />
                 Log out
               </DropdownMenuItem>
             </DropdownMenuContent>

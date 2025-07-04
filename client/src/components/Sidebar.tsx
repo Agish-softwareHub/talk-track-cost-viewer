@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 
 const menuItems = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard, color: "from-blue-500 to-cyan-500" },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, color: "from-blue-500 to-cyan-500" },
   { title: "Call Reports", url: "/reports", icon: BarChart, color: "from-purple-500 to-pink-500" },
   { title: "Analytics", url: "/analytics", icon: TrendingUp, color: "from-indigo-500 to-purple-500" },
   { title: "Call Queue", url: "/queue", icon: Phone, color: "from-teal-500 to-cyan-500" },
