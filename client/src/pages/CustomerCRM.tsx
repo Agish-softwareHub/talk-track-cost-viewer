@@ -43,6 +43,7 @@ export default function CustomerCRM() {
       avatar: "JA",
       joinDate: "2023-03-15",
       notes: "Prefers AI agents for technical support, high satisfaction with automated responses",
+      tags: ["tech-savvy", "high-value", "automation"],
       callHistory: [
         { id: "1", date: "2024-01-15", type: "Support", duration: "12m", outcome: "Resolved" },
         { id: "2", date: "2024-01-10", type: "Sales", duration: "8m", outcome: "Follow-up" },
@@ -65,6 +66,7 @@ export default function CustomerCRM() {
       avatar: "SM",
       joinDate: "2023-08-22",
       notes: "Frequent user, prefers quick AI responses for routine inquiries",
+      tags: ["frequent-user", "design", "quick-response"],
       callHistory: [
         { id: "1", date: "2024-01-12", type: "Billing", duration: "6m", outcome: "Resolved" },
         { id: "2", date: "2024-01-08", type: "Support", duration: "15m", outcome: "Resolved" }
@@ -86,6 +88,7 @@ export default function CustomerCRM() {
       avatar: "MC",
       joinDate: "2024-01-01",
       notes: "New to AI call agents, showing high interest in automation features",
+      tags: ["startup", "potential", "new-user"],
       callHistory: [
         { id: "1", date: "2024-01-14", type: "Sales", duration: "22m", outcome: "Interested" },
         { id: "2", date: "2024-01-02", type: "Onboarding", duration: "18m", outcome: "Completed" }
@@ -107,6 +110,7 @@ export default function CustomerCRM() {
       avatar: "LR",
       joinDate: "2022-11-10",
       notes: "Previously active, satisfied with AI agent efficiency but needs re-engagement",
+      tags: ["consulting", "re-engagement-needed", "premium"],
       callHistory: [
         { id: "1", date: "2023-12-20", type: "Support", duration: "9m", outcome: "Resolved" },
         { id: "2", date: "2023-12-15", type: "Account Review", duration: "35m", outcome: "Renewed" }
@@ -343,7 +347,7 @@ export default function CustomerCRM() {
                     </div>
 
                     <div className="flex flex-wrap gap-1 mt-3">
-                      {customer.tags.map((tag, index) => (
+                      {customer.tags.map((tag: string, index: number) => (
                         <Badge key={index} variant="secondary" className="text-xs">
                           {tag}
                         </Badge>

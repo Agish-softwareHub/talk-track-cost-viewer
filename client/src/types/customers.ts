@@ -15,6 +15,7 @@ export interface Customer {
   avatar: string;
   joinDate: string;
   notes: string;
+  tags: string[];
   callHistory: CallHistoryItem[];
 }
 
