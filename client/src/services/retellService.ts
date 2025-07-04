@@ -148,6 +148,8 @@ class RetellService {
 
   private async makeRequest(endpoint: string, options: RequestInit = {}) {
     const url = `${this.baseURL}${endpoint}`;
+    console.log(`Making request to: ${url}`, options);
+    
     const response = await fetch(url, {
       ...options,
       headers: {
@@ -157,18 +159,28 @@ class RetellService {
       },
     });
 
+    console.log(`Response status: ${response.status}`);
+    
     if (!response.ok) {
       const errorText = await response.text();
+      console.error(`Retell API error: ${response.status} ${response.statusText} - ${errorText}`);
       throw new Error(`Retell API error: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
-    return response.json();
+    const data = await response.json();
+    console.log('Response data:', data);
+    return data;
   }
 
-  // Agent Management - Updated endpoints according to API docs
+  // Agent Management - Fixed endpoints according to API docs
   async getAgents(): Promise<RetellAgent[]> {
-    const response = await this.makeRequest('/list-agents');
-    return response || [];
+    try {
+      const response = await this.makeRequest('/list-agents');
+      return Array.isArray(response) ? response : (response.agents || []);
+    } catch (error) {
+      console.error('Error fetching agents:', error);
+      return [];
+    }
   }
 
   async getAgent(agentId: string): Promise<RetellAgent> {
@@ -176,39 +188,70 @@ class RetellService {
   }
 
   async createAgent(agentData: Partial<RetellAgent>): Promise<RetellAgent> {
-    // Ensure response_engine is properly formatted
-    const transformedData = {
-      ...agentData,
-      response_engine: typeof agentData.response_engine === 'string' 
-        ? { type: agentData.response_engine }
-        : agentData.response_engine,
-      // Set default values for optional parameters
-      voice_temperature: agentData.voice_temperature || 1.0,
-      voice_speed: agentData.voice_speed || 1.0,
-      volume: agentData.volume || 1.0,
-      responsiveness: agentData.responsiveness || 1.0,
-      interruption_sensitivity: agentData.interruption_sensitivity || 1.0,
-      enable_backchannel: agentData.enable_backchannel !== undefined ? agentData.enable_backchannel : false,
-      normalize_for_speech: agentData.normalize_for_speech !== undefined ? agentData.normalize_for_speech : true,
+    // Clean and validate agent data
+    const cleanedData = {
+      agent_name: agentData.agent_name || 'New Agent',
+      voice_id: agentData.voice_id || '11labs-Adrian',
+      language: agentData.language || 'en-US',
+      response_engine: {
+        type: 'retell-llm',
+        ...(typeof agentData.response_engine === 'object' ? agentData.response_engine : {})
+      },
+      // Optional fields with defaults
+      begin_message: agentData.begin_message || 'Hello! How can I help you today?',
+      general_prompt: agentData.general_prompt || 'You are a helpful AI assistant.',
+      voice_temperature: agentData.voice_temperature ?? 1.0,
+      voice_speed: agentData.voice_speed ?? 1.0,
+      volume: agentData.volume ?? 1.0,
+      responsiveness: agentData.responsiveness ?? 1.0,
+      interruption_sensitivity: agentData.interruption_sensitivity ?? 1.0,
+      enable_backchannel: agentData.enable_backchannel ?? false,
+      normalize_for_speech: agentData.normalize_for_speech ?? true,
+      // Include other provided fields
+      ...(agentData.general_tools && { general_tools: agentData.general_tools }),
+      ...(agentData.states && { states: agentData.states }),
+      ...(agentData.llm_websocket_url && { llm_websocket_url: agentData.llm_websocket_url }),
+      ...(agentData.backchannel_frequency && { backchannel_frequency: agentData.backchannel_frequency }),
+      ...(agentData.backchannel_words && { backchannel_words: agentData.backchannel_words }),
+      ...(agentData.reminder_trigger_ms && { reminder_trigger_ms: agentData.reminder_trigger_ms }),
+      ...(agentData.reminder_max_count && { reminder_max_count: agentData.reminder_max_count }),
+      ...(agentData.ambient_sound && { ambient_sound: agentData.ambient_sound }),
+      ...(agentData.ambient_sound_volume && { ambient_sound_volume: agentData.ambient_sound_volume }),
+      ...(agentData.language_detection !== undefined && { language_detection: agentData.language_detection }),
+      ...(agentData.opt_out_sensitive_data_storage !== undefined && { opt_out_sensitive_data_storage: agentData.opt_out_sensitive_data_storage }),
+      ...(agentData.pronunciation_dictionary && { pronunciation_dictionary: agentData.pronunciation_dictionary }),
+      ...(agentData.end_call_after_silence_ms && { end_call_after_silence_ms: agentData.end_call_after_silence_ms }),
+      ...(agentData.max_call_duration_ms && { max_call_duration_ms: agentData.max_call_duration_ms }),
+      ...(agentData.inbound_dynamic_variables_webhook_url && { inbound_dynamic_variables_webhook_url: agentData.inbound_dynamic_variables_webhook_url }),
+      ...(agentData.outbound_dynamic_variables_webhook_url && { outbound_dynamic_variables_webhook_url: agentData.outbound_dynamic_variables_webhook_url }),
+      ...(agentData.end_call_function_enabled !== undefined && { end_call_function_enabled: agentData.end_call_function_enabled }),
+      ...(agentData.boosted_keywords && { boosted_keywords: agentData.boosted_keywords }),
+      ...(agentData.enable_transcription_formatting !== undefined && { enable_transcription_formatting: agentData.enable_transcription_formatting }),
+      ...(agentData.post_call_analysis_data && { post_call_analysis_data: agentData.post_call_analysis_data })
     };
     
+    console.log('Creating agent with data:', cleanedData);
     return this.makeRequest('/create-agent', {
       method: 'POST',
-      body: JSON.stringify(transformedData),
+      body: JSON.stringify(cleanedData),
     });
   }
 
   async updateAgent(agentId: string, agentData: Partial<RetellAgent>): Promise<RetellAgent> {
-    const transformedData = {
-      ...agentData,
-      response_engine: typeof agentData.response_engine === 'string' 
-        ? { type: agentData.response_engine }
-        : agentData.response_engine
+    // Clean the update data, removing read-only fields
+    const { agent_id, last_modification_timestamp, ...updateData } = agentData;
+    
+    const cleanedData = {
+      ...updateData,
+      ...(updateData.response_engine && typeof updateData.response_engine === 'string' 
+        ? { response_engine: { type: updateData.response_engine } }
+        : updateData.response_engine && { response_engine: updateData.response_engine })
     };
     
+    console.log('Updating agent with data:', cleanedData);
     return this.makeRequest(`/update-agent/${agentId}`, {
       method: 'PATCH',
-      body: JSON.stringify(transformedData),
+      body: JSON.stringify(cleanedData),
     });
   }
 
@@ -227,20 +270,28 @@ class RetellService {
     start_timestamp_after?: number;
     start_timestamp_before?: number;
   }): Promise<{ calls: RetellCall[]; has_more: boolean; next_pagination_key?: string }> {
-    const params = new URLSearchParams({
-      limit: limit.toString(),
-      ...(pagination_key && { pagination_key }),
-      ...(filter_criteria?.agent_id && { agent_id: filter_criteria.agent_id }),
-      ...(filter_criteria?.call_type && { call_type: filter_criteria.call_type }),
-      ...(filter_criteria?.call_status && { call_status: filter_criteria.call_status }),
-      ...(filter_criteria?.direction && { direction: filter_criteria.direction }),
-      ...(filter_criteria?.start_timestamp_after && { start_timestamp_after: filter_criteria.start_timestamp_after.toString() }),
-      ...(filter_criteria?.start_timestamp_before && { start_timestamp_before: filter_criteria.start_timestamp_before.toString() }),
-    });
-    
-    return this.makeRequest(`/v2/list-calls?`,{
-      method: 'POST',
-    } );
+    try {
+      const params = new URLSearchParams({
+        limit: limit.toString(),
+        ...(pagination_key && { pagination_key }),
+        ...(filter_criteria?.agent_id && { agent_id: filter_criteria.agent_id }),
+        ...(filter_criteria?.call_type && { call_type: filter_criteria.call_type }),
+        ...(filter_criteria?.call_status && { call_status: filter_criteria.call_status }),
+        ...(filter_criteria?.direction && { direction: filter_criteria.direction }),
+        ...(filter_criteria?.start_timestamp_after && { start_timestamp_after: filter_criteria.start_timestamp_after.toString() }),
+        ...(filter_criteria?.start_timestamp_before && { start_timestamp_before: filter_criteria.start_timestamp_before.toString() }),
+      });
+      
+      const response = await this.makeRequest(`/v2/list-calls?${params}`);
+      return {
+        calls: Array.isArray(response) ? response : (response.calls || []),
+        has_more: response.has_more || false,
+        next_pagination_key: response.next_pagination_key
+      };
+    } catch (error) {
+      console.error('Error fetching calls:', error);
+      return { calls: [], has_more: false };
+    }
   }
 
   async getCall(callId: string): Promise<RetellCall> {
