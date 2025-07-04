@@ -1,153 +1,243 @@
 
 import { useState, useEffect } from "react";
-import { MetricCard } from "@/components/MetricCard";
-import { Activity, Clock, FileText, BarChart } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getMetrics } from "@/services/metricsService";
-import { getRecentCalls } from "@/services/callsService";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { 
+  Bot, 
+  Phone, 
+  Users, 
+  TrendingUp, 
+  Clock, 
+  Zap,
+  Target,
+  AlertCircle,
+  PlayCircle,
+  Pause,
+  BarChart3,
+  Activity
+} from "lucide-react";
+import { EnhancedMetricCard } from "@/components/EnhancedMetricCard";
+import { ActivityFeed } from "@/components/ActivityFeed";
+import { QuickActions } from "@/components/QuickActions";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+
+const performanceData = [
+  { time: '9AM', calls: 45, satisfaction: 98 },
+  { time: '10AM', calls: 52, satisfaction: 97 },
+  { time: '11AM', calls: 38, satisfaction: 99 },
+  { time: '12PM', calls: 65, satisfaction: 96 },
+  { time: '1PM', calls: 58, satisfaction: 98 },
+  { time: '2PM', calls: 72, satisfaction: 97 },
+  { time: '3PM', calls: 48, satisfaction: 99 },
+];
 
 export default function Dashboard() {
-  const navigate = useNavigate();
-  
-  const { data: metrics = [], isLoading: metricsLoading } = useQuery({
-    queryKey: ['metrics'],
-    queryFn: getMetrics,
-  });
+  const [isLive, setIsLive] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
-  const { data: recentCalls = [], isLoading: callsLoading } = useQuery({
-    queryKey: ['recentCalls'],
-    queryFn: getRecentCalls,
-  });
-
-  const iconMap = {
-    Activity,
-    Clock,
-    FileText,
-    BarChart
-  };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div className="p-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Overview</h1>
-        <p className="text-gray-600">Monitor your AI agent performance and call analytics</p>
-      </div>
-
-      {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {metricsLoading ? (
-          Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-lg p-6 animate-pulse">
-              <div className="h-4 bg-gray-200 rounded mb-4"></div>
-              <div className="h-8 bg-gray-200 rounded mb-2"></div>
-              <div className="h-3 bg-gray-200 rounded"></div>
-            </div>
-          ))
-        ) : (
-          metrics.map((metric: any, index: number) => (
-            <MetricCard 
-              key={index} 
-              {...metric} 
-              icon={iconMap[metric.icon as keyof typeof iconMap]}
-            />
-          ))
-        )}
-      </div>
-
-      {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Recent Calls */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Recent Calls</h2>
-            <button 
-              onClick={() => navigate('/reports')}
-              className="text-blue-600 hover:text-blue-700 font-medium text-sm"
-            >
-              View All
-            </button>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="space-y-8">
+        {/* Header Section */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+              AI CallCenter Dashboard
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Real-time insights into your AI-powered customer service operations
+            </p>
           </div>
-          
-          <div className="space-y-4">
-            {callsLoading ? (
-              Array.from({ length: 4 }).map((_, index) => (
-                <div key={index} className="p-4 border border-gray-100 rounded-lg animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-3 bg-gray-200 rounded mb-1"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                </div>
-              ))
-            ) : (
-              recentCalls.map((call: any) => (
-                <div key={call.id} className="flex items-center justify-between p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1">
-                      <span className="font-medium text-gray-900">{call.number}</span>
-                      <span className={`px-2 py-1 text-xs rounded-full ${
-                        call.status === 'completed' 
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-red-100 text-red-700'
-                      }`}>
-                        {call.status}
-                      </span>
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {call.duration} • {call.cost} • {call.timestamp}
-                    </div>
-                    <div className="text-xs text-blue-600 mt-1">
-                      Agent: {call.agent}
-                    </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full ${isLive ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`}></div>
+              <span className="text-sm font-medium">
+                {isLive ? 'Live' : 'Offline'} • {currentTime.toLocaleTimeString()}
+              </span>
+            </div>
+            <Button
+              onClick={() => setIsLive(!isLive)}
+              variant={isLive ? "secondary" : "default"}
+              className="flex items-center gap-2"
+            >
+              {isLive ? <Pause className="h-4 w-4" /> : <PlayCircle className="h-4 w-4" />}
+              {isLive ? 'Pause' : 'Start'} Live Mode
+            </Button>
+          </div>
+        </div>
+
+        {/* Key Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <EnhancedMetricCard
+            title="Active AI Agents"
+            value="12"
+            change={{ value: 20, type: 'increase', period: 'last hour' }}
+            icon={Bot}
+            gradient="from-blue-500 to-cyan-500"
+            description="Handling customer inquiries"
+          />
+          <EnhancedMetricCard
+            title="Calls Today"
+            value="1,247"
+            change={{ value: 15, type: 'increase', period: 'yesterday' }}
+            icon={Phone}
+            gradient="from-green-500 to-teal-500"
+            description="Average 3.2 min duration"
+          />
+          <EnhancedMetricCard
+            title="Customer Satisfaction"
+            value="98.5%"
+            change={{ value: 2.3, type: 'increase', period: 'last week' }}
+            icon={Target}
+            gradient="from-purple-500 to-pink-500"
+            description="Based on 892 surveys"
+          />
+          <EnhancedMetricCard
+            title="Response Time"
+            value="0.8s"
+            change={{ value: 12, type: 'decrease', period: 'last hour' }}
+            icon={Zap}
+            gradient="from-orange-500 to-red-500"
+            description="Average AI response"
+          />
+        </div>
+
+        {/* Charts and Analytics */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5" />
+                Call Volume & Satisfaction
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={performanceData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="time" />
+                  <YAxis />
+                  <Tooltip />
+                  <Area 
+                    type="monotone" 
+                    dataKey="calls" 
+                    stackId="1"
+                    stroke="#3b82f6" 
+                    fill="url(#colorCalls)" 
+                  />
+                  <defs>
+                    <linearGradient id="colorCalls" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
+                </AreaChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                Satisfaction Trend
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={performanceData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="time" />
+                  <YAxis domain={[95, 100]} />
+                  <Tooltip />
+                  <Line 
+                    type="monotone"
+                    dataKey="satisfaction"
+                    stroke="#10b981"
+                    strokeWidth={3}
+                    dot={{ fill: '#10b981', r: 6 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Lower Section */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          {/* System Status */}
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Activity className="h-5 w-5" />
+                System Status
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {[
+                { name: 'AI Processing', status: 'operational', uptime: '99.9%' },
+                { name: 'Call Routing', status: 'operational', uptime: '100%' },
+                { name: 'Database', status: 'operational', uptime: '99.8%' },
+                { name: 'Analytics', status: 'maintenance', uptime: '98.5%' }
+              ].map((service) => (
+                <div key={service.name} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      service.status === 'operational' ? 'bg-green-400' : 
+                      service.status === 'maintenance' ? 'bg-yellow-400' : 'bg-red-400'
+                    }`}></div>
+                    <span className="font-medium">{service.name}</span>
+                  </div>
+                  <div className="text-right">
+                    <Badge variant={service.status === 'operational' ? 'default' : 'secondary'}>
+                      {service.uptime}
+                    </Badge>
                   </div>
                 </div>
-              ))
-            )}
-          </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <QuickActions />
+
+          {/* Activity Feed */}
+          <ActivityFeed />
         </div>
 
-        {/* AI Agent Performance - Static for now */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">AI Agent Performance</h2>
-          
-          <div className="space-y-6">
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600">Overall Success Rate</span>
-                <span className="font-semibold text-gray-900">94.2%</span>
+        {/* Performance Alerts */}
+        <Card className="border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50 to-white">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full">
+                <AlertCircle className="h-6 w-6 text-blue-600" />
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full" style={{width: '94.2%'}}></div>
-              </div>
-            </div>
-            
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600">Peak Hours</span>
-                <span className="font-semibold text-gray-900">2PM - 4PM</span>
-              </div>
-              <div className="text-sm text-gray-500">Highest call volume today</div>
-            </div>
-            
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600">Average Response Time</span>
-                <span className="font-semibold text-gray-900">0.8 seconds</span>
-              </div>
-              <div className="text-sm text-gray-500">AI agent response time</div>
-            </div>
-            
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600">Active Agents</span>
-                <span className="font-semibold text-gray-900">5</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full" style={{width: '100%'}}></div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 mb-2">Performance Insights</h3>
+                <p className="text-gray-600 mb-4">
+                  Your AI agents are performing exceptionally well today with a 15% increase in call resolution rate.
+                  Consider scaling up to handle the increased demand.
+                </p>
+                <div className="flex gap-3">
+                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    Auto-Scale Now
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    View Details
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
