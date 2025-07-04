@@ -238,15 +238,17 @@ class RetellService {
       ...(filter_criteria?.start_timestamp_before && { start_timestamp_before: filter_criteria.start_timestamp_before.toString() }),
     });
     
-    return this.makeRequest(`/list-calls?${params}`);
+    return this.makeRequest(`/v2/list-calls?`,{
+      method: 'POST',
+    } );
   }
 
   async getCall(callId: string): Promise<RetellCall> {
-    return this.makeRequest(`/get-call/${callId}`);
+    return this.makeRequest(`/v2/get-call/${callId}`);
   }
 
   async createCall(callData: CreateCallRequest): Promise<CreateCallResponse> {
-    return this.makeRequest('/create-call', {
+    return this.makeRequest('/v2/create-call', {
       method: 'POST',
       body: JSON.stringify(callData),
     });

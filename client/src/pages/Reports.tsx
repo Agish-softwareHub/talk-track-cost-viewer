@@ -52,7 +52,7 @@ export default function Reports() {
     );
   }
 
-  const calls = callData?.calls || [];
+  const calls = callData || [];
 
   return (
     <div className="space-y-8">
