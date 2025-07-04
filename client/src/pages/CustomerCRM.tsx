@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Users, Search, Plus, Phone, Mail, MapPin, Calendar, Star, Edit, Trash2, Eye, MessageSquare, Filter, ArrowUpDown, Bot, Zap, Brain, TrendingUp, Clock, Target, AlertCircle, CheckCircle2, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
 import { Customer } from "@/types/customers";
+import BulkCustomerActions from "@/components/BulkCustomerActions";
 
 interface Opportunity {
   id: string;
@@ -37,6 +39,9 @@ export default function CustomerCRM() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortBy, setSortBy] = useState("name");
+  const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
+  const [allCustomers, setAllCustomers] = useState<Customer[]>(customers);
+  const { toast } = useToast();
 
   const customers: Customer[] = [
     {
@@ -193,7 +198,7 @@ export default function CustomerCRM() {
     }
   ];
 
-  const filteredCustomers = customers.filter(customer => {
+  const filteredCustomers = allCustomers.filter(customer => {
     const matchesSearch = customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          customer.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -216,6 +221,56 @@ export default function CustomerCRM() {
         return 0;
     }
   });
+
+  const handleCustomerSelection = (customerId: string, checked: boolean) => {
+    if (checked) {
+      setSelectedCustomers([...selectedCustomers, customerId]);
+    } else {
+      setSelectedCustomers(selectedCustomers.filter(id => id !== customerId));
+    }
+  };
+
+  const handleBulkCall = (customerIds: string[]) => {
+    const selectedCustomerNames = allCustomers
+      .filter(c => customerIds.includes(c.id))
+      .map(c => c.name);
+    
+    toast({
+      title: "AI Bulk Calling Started",
+      description: `Initiating AI calls to ${customerIds.length} customers: ${selectedCustomerNames.slice(0, 3).join(', ')}${customerIds.length > 3 ? '...' : ''}`,
+    });
+    
+    // Here you would integrate with your actual calling service
+    console.log("Starting bulk AI calls for customers:", customerIds);
+    
+    // Clear selection after calling
+    setSelectedCustomers([]);
+  };
+
+  const handleAddCustomers = (newCustomers: Partial<Customer>[]) => {
+    const customersWithDefaults = newCustomers.map(customer => ({
+      ...customer,
+      id: customer.id || `CUST-${Date.now()}-${Math.random()}`,
+      status: customer.status || "potential",
+      tier: customer.tier || "basic",
+      lastContact: customer.lastContact || new Date().toISOString().split('T')[0],
+      totalCalls: customer.totalCalls || 0,
+      totalSpent: customer.totalSpent || "$0",
+      satisfaction: customer.satisfaction || 0,
+      avatar: customer.avatar || customer.name?.split(' ').map(n => n[0]).join('').toUpperCase() || "??",
+      joinDate: customer.joinDate || new Date().toISOString().split('T')[0],
+      notes: customer.notes || "New customer",
+      tags: customer.tags || ["new-customer"],
+      callHistory: customer.callHistory || []
+    })) as Customer[];
+
+    setAllCustomers([...allCustomers, ...customersWithDefaults]);
+    
+    toast({
+      title: "Customers Added",
+      description: `Successfully added ${customersWithDefaults.length} new customer${customersWithDefaults.length > 1 ? 's' : ''}`,
+    });
+  };
 
   const getStatusColor = (status: string): string => {
     switch (status) {
@@ -274,17 +329,17 @@ export default function CustomerCRM() {
             </div>
             <div className="flex items-center gap-6">
               <div className="text-center">
-                <div className="text-2xl font-bold">{customers.length}</div>
+                <div className="text-2xl font-bold">{allCustomers.length}</div>
                 <div className="text-blue-100 text-sm">Total Customers</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold">{aiInsights.length}</div>
                 <div className="text-blue-100 text-sm">AI Insights</div>
               </div>
-              <Button className="bg-white/20 hover:bg-white/30 text-white border-white/30">
-                <Plus size={16} className="mr-2" />
-                Add Customer
-              </Button>
+              <div className="text-center">
+                <div className="text-2xl font-bold">{selectedCustomers.length}</div>
+                <div className="text-blue-100 text-sm">Selected</div>
+              </div>
             </div>
           </div>
         </div>
@@ -324,7 +379,7 @@ export default function CustomerCRM() {
       {/* Enhanced Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: "Active Customers", value: customers.filter(c => c.status === "active").length, color: "green", icon: Users },
+          { label: "Active Customers", value: allCustomers.filter(c => c.status === "active").length, color: "green", icon: Users },
           { label: "AI Resolution Rate", value: "94%", color: "blue", icon: Bot },
           { label: "Avg Satisfaction", value: "4.4/5", color: "yellow", icon: Star },
           { label: "Response Time", value: "0.8s", color: "purple", icon: Zap },
@@ -355,6 +410,15 @@ export default function CustomerCRM() {
         </TabsList>
 
         <TabsContent value="customers" className="space-y-6">
+          {/* Bulk Actions */}
+          <BulkCustomerActions
+            customers={sortedCustomers}
+            selectedCustomers={selectedCustomers}
+            onSelectionChange={setSelectedCustomers}
+            onBulkCall={handleBulkCall}
+            onAddCustomers={handleAddCustomers}
+          />
+
           {/* Enhanced Search and Filters */}
           <Card>
             <CardContent className="p-6">
@@ -412,11 +476,18 @@ export default function CustomerCRM() {
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-4">
-                        <Avatar className="h-12 w-12">
-                          <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold">
-                            {customer.avatar}
-                          </AvatarFallback>
-                        </Avatar>
+                        <div className="flex items-center gap-3">
+                          <Checkbox
+                            checked={selectedCustomers.includes(customer.id)}
+                            onCheckedChange={(checked) => handleCustomerSelection(customer.id, checked as boolean)}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                          <Avatar className="h-12 w-12">
+                            <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold">
+                              {customer.avatar}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
                         <div>
                           <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                             {customer.name}
