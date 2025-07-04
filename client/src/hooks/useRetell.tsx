@@ -1,7 +1,6 @@
-
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { retellService, RetellAgent, RetellCall, RetellPhoneNumber } from '@/services/retellService';
-import { toast } from 'sonner';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {RetellAgent, retellService} from '@/services/retellService';
+import {toast} from 'sonner';
 
 export function useRetellAgents() {
   return useQuery({
@@ -20,8 +19,7 @@ export function useRetellCalls(limit = 50, filterCriteria?: {
   return useQuery({
     queryKey: ['retell-calls', limit, filterCriteria],
     queryFn: async () => {
-      const response = await retellService.getCalls(limit, undefined, filterCriteria);
-      return response;
+      return await retellService.getCalls(limit, undefined, filterCriteria);
     },
     staleTime: 10000, // 10 seconds
   });

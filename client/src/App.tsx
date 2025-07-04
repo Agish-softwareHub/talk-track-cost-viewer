@@ -34,6 +34,7 @@ import KnowledgeBase from "./pages/KnowledgeBase";
 import CallRecordings from "./pages/CallRecordings";
 import CustomerCRM from "./pages/CustomerCRM";
 import PhoneNumbers from "./pages/PhoneNumbers";
+import Voices from "@/pages/Voices.tsx";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
             <Route path="/reports" element={<Layout><Reports /></Layout>} />
             <Route path="/analytics" element={<Layout><Analytics /></Layout>} />
             <Route path="/queue" element={<Layout><CallQueue /></Layout>} />
+            <Route path="/voice" element={<Layout><Voices /></Layout>} />
             <Route path="/scheduler" element={<Layout><Scheduler /></Layout>} />
             <Route path="/scoring" element={<Layout><CallScoring /></Layout>} />
             <Route path="/sentiment" element={<Layout><SentimentAnalysis /></Layout>} />

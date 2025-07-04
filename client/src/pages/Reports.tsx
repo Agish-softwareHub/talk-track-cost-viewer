@@ -78,7 +78,7 @@ export default function Reports() {
     );
   }
 
-  const calls = callData || [];
+  const calls:any = callData || [];
   const filteredCalls = calls.filter(call => {
     const matchesSearch = call.call_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (call.to_number && call.to_number.includes(searchTerm)) ||

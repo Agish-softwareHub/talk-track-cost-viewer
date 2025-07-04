@@ -1,11 +1,11 @@
 
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  Activity, 
-  Settings, 
-  BarChart, 
+import {
+  LayoutDashboard,
+  Activity,
+  Settings,
+  BarChart,
   Clock,
   ChevronLeft,
   ChevronRight,
@@ -26,7 +26,7 @@ import {
   Monitor,
   BookOpen,
   Headphones,
-  UserCheck
+  UserCheck, Volume1
 } from "lucide-react";
 
 const menuItems = [
@@ -36,6 +36,7 @@ const menuItems = [
   { title: "Call Queue", url: "/queue", icon: Phone, color: "from-teal-500 to-cyan-500" },
   { title: "Scheduler", url: "/scheduler", icon: Calendar, color: "from-amber-500 to-orange-500" },
   { title: "AI Agents", url: "/ai-agents", icon: Bot, color: "from-emerald-500 to-teal-500" },
+  { title: "Voices", url: "/voice", icon: Volume1, color: "from-emerald-500 to-teal-500" },
   { title: "Phone Numbers", url: "/phone-numbers", icon: Phone, color: "from-green-500 to-emerald-500" },
   { title: "Call Scoring", url: "/scoring", icon: Target, color: "from-blue-500 to-indigo-500" },
   { title: "Sentiment Analysis", url: "/sentiment", icon: Brain, color: "from-pink-500 to-rose-500" },
