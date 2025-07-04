@@ -14,7 +14,10 @@ export function useRetellAgents() {
 export function useRetellCalls(limit = 50) {
   return useQuery({
     queryKey: ['retell-calls', limit],
-    queryFn: () => retellService.getCalls(limit),
+    queryFn: async () => {
+      const response = await retellService.getCalls(limit);
+      return response;
+    },
     staleTime: 10000, // 10 seconds
   });
 }

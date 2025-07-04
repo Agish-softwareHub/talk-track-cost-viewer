@@ -7,7 +7,10 @@ export interface RetellAgent {
   agent_name: string;
   voice_id: string;
   language: string;
-  response_engine: string;
+  response_engine: {
+    type: string;
+    llm_id?: string;
+  };
   llm_websocket_url?: string;
   begin_message?: string;
   general_prompt?: string;
@@ -70,22 +73,26 @@ class RetellService {
   private async makeRequest(endpoint: string, options: RequestInit = {}) {
     const url = `${this.baseURL}${endpoint}`;
     const response = await fetch(url, {
+      ...options,
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
+        ...options.headers,
       },
     });
 
     if (!response.ok) {
-      throw new Error(`Retell API error: ${response.status} ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Retell API error: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     return response.json();
   }
 
-  // Agent Management
+  // Agent Management - Updated endpoints according to API docs
   async getAgents(): Promise<RetellAgent[]> {
     const response = await this.makeRequest('/list-agents');
-    return response.agents || [];
+    return response || [];
   }
 
   async getAgent(agentId: string): Promise<RetellAgent> {
@@ -93,16 +100,31 @@ class RetellService {
   }
 
   async createAgent(agentData: Partial<RetellAgent>): Promise<RetellAgent> {
+    // Transform the response_engine from string to object format expected by API
+    const transformedData = {
+      ...agentData,
+      response_engine: typeof agentData.response_engine === 'string' 
+        ? { type: agentData.response_engine }
+        : agentData.response_engine
+    };
+    
     return this.makeRequest('/create-agent', {
       method: 'POST',
-      body: JSON.stringify(agentData),
+      body: JSON.stringify(transformedData),
     });
   }
 
   async updateAgent(agentId: string, agentData: Partial<RetellAgent>): Promise<RetellAgent> {
+    const transformedData = {
+      ...agentData,
+      response_engine: typeof agentData.response_engine === 'string' 
+        ? { type: agentData.response_engine }
+        : agentData.response_engine
+    };
+    
     return this.makeRequest(`/update-agent/${agentId}`, {
       method: 'PATCH',
-      body: JSON.stringify(agentData),
+      body: JSON.stringify(transformedData),
     });
   }
 
@@ -112,31 +134,31 @@ class RetellService {
     });
   }
 
-  // Call Management
+  // Call Management - Corrected endpoints
   async getCalls(limit: number = 100, pagination_key?: string): Promise<{ calls: RetellCall[]; has_more: boolean; next_pagination_key?: string }> {
     const params = new URLSearchParams({
       limit: limit.toString(),
       ...(pagination_key && { pagination_key }),
     });
     
-    return this.makeRequest(`/v2/list-calls?${params}`);
+    return this.makeRequest(`/list-calls?${params}`);
   }
 
   async getCall(callId: string): Promise<RetellCall> {
-    return this.makeRequest(`/v2/get-call/${callId}`);
+    return this.makeRequest(`/get-call/${callId}`);
   }
 
   async createCall(callData: CreateCallRequest): Promise<CreateCallResponse> {
-    return this.makeRequest('/v2/create-call', {
+    return this.makeRequest('/create-call', {
       method: 'POST',
       body: JSON.stringify(callData),
     });
   }
 
-  // Phone Number Management
+  // Phone Number Management - Updated according to API docs
   async getPhoneNumbers(): Promise<RetellPhoneNumber[]> {
     const response = await this.makeRequest('/list-phone-numbers');
-    return response.phone_numbers || [];
+    return response || [];
   }
 
   async getPhoneNumber(phoneNumber: string): Promise<RetellPhoneNumber> {
@@ -166,7 +188,7 @@ class RetellService {
     });
   }
 
-  // Analytics
+  // Analytics - Updated endpoint
   async getCallAnalytics(startDate?: string, endDate?: string): Promise<any> {
     const params = new URLSearchParams({
       ...(startDate && { start_date: startDate }),

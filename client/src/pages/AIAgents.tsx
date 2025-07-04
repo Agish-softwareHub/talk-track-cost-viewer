@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -156,8 +157,10 @@ export default function AIAgents() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="retell-llm">Retell LLM</SelectItem>
-                      <SelectItem value="openai-gpt-3.5-turbo">OpenAI GPT-3.5</SelectItem>
-                      <SelectItem value="openai-gpt-4">OpenAI GPT-4</SelectItem>
+                      <SelectItem value="openai">OpenAI</SelectItem>
+                      <SelectItem value="anthropic">Anthropic</SelectItem>
+                      <SelectItem value="azure-openai">Azure OpenAI</SelectItem>
+                      <SelectItem value="together-ai">Together AI</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -223,7 +226,11 @@ export default function AIAgents() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Engine:</span>
-                  <span className="font-medium">{agent.response_engine}</span>
+                  <span className="font-medium">
+                    {typeof agent.response_engine === 'object' 
+                      ? agent.response_engine.type 
+                      : agent.response_engine}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Created:</span>
