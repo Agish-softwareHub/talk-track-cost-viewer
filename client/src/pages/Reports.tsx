@@ -28,7 +28,7 @@ export default function Reports() {
     }
   };
 
-  const formatDuration = (ms: number) => {
+  const formatDuration = (ms?: number) => {
     if (!ms) return "N/A";
     const seconds = Math.floor(ms / 1000);
     const minutes = Math.floor(seconds / 60);
@@ -36,7 +36,7 @@ export default function Reports() {
     return `${minutes}m ${remainingSeconds}s`;
   };
 
-  const formatTimestamp = (timestamp: number) => {
+  const formatTimestamp = (timestamp?: number) => {
     if (!timestamp) return "N/A";
     return new Date(timestamp * 1000).toLocaleString();
   };
@@ -203,7 +203,7 @@ export default function Reports() {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Duration</label>
-                  <p>{formatDuration(callDetails.call_duration_ms)}</p>
+                  <p>{formatDuration(callDetails.call_duration_ms || callDetails.duration_ms)}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Start Time</label>
@@ -212,21 +212,21 @@ export default function Reports() {
               </div>
 
               {/* Performance Metrics */}
-              {callDetails.agent_response_latency_p50 && (
+              {callDetails.latency && (
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Performance Metrics</h3>
                   <div className="grid grid-cols-3 gap-4">
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <label className="text-sm font-medium text-gray-600">Response Latency (P50)</label>
-                      <p className="text-xl font-bold">{callDetails.agent_response_latency_p50}ms</p>
+                      <label className="text-sm font-medium text-gray-600">LLM Latency (P50)</label>
+                      <p className="text-xl font-bold">{callDetails.latency.llm?.p50 || 'N/A'}ms</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <label className="text-sm font-medium text-gray-600">Response Latency (P90)</label>
-                      <p className="text-xl font-bold">{callDetails.agent_response_latency_p90 || 'N/A'}ms</p>
+                      <label className="text-sm font-medium text-gray-600">E2E Latency (P50)</label>
+                      <p className="text-xl font-bold">{callDetails.latency.e2e?.p50 || 'N/A'}ms</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <label className="text-sm font-medium text-gray-600">Interruption Count</label>
-                      <p className="text-xl font-bold">{callDetails.agent_interruption_count || 0}</p>
+                      <label className="text-sm font-medium text-gray-600">TTS Latency (P50)</label>
+                      <p className="text-xl font-bold">{callDetails.latency.tts?.p50 || 'N/A'}ms</p>
                     </div>
                   </div>
                 </div>
@@ -249,22 +249,65 @@ export default function Reports() {
                         <Badge variant="outline" className="ml-2">{callDetails.call_analysis.user_sentiment}</Badge>
                       </div>
                     )}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Call Successful</label>
+                        <Badge variant={callDetails.call_analysis.call_successful ? "default" : "destructive"} className="ml-2">
+                          {callDetails.call_analysis.call_successful ? "Yes" : "No"}
+                        </Badge>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Task Completion</label>
+                        <Badge variant="outline" className="ml-2">{callDetails.call_analysis.agent_task_completion_rating}</Badge>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
 
-              {/* Recording and Transcript */}
+              {/* Call Cost */}
+              {callDetails.call_cost && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Call Cost</h3>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <label className="text-sm font-medium text-gray-600">Total Cost</label>
+                      <p className="text-xl font-bold">${(callDetails.call_cost.combined_cost / 100).toFixed(2)}</p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <label className="text-sm font-medium text-gray-600">Duration</label>
+                      <p className="text-xl font-bold">{callDetails.call_cost.total_duration_seconds}s</p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <label className="text-sm font-medium text-gray-600">Unit Price</label>
+                      <p className="text-xl font-bold">${callDetails.call_cost.total_duration_unit_price}/s</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Transcript */}
+              {callDetails.transcript && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Transcript</h3>
+                  <div className="bg-gray-50 p-4 rounded-lg max-h-64 overflow-y-auto">
+                    <pre className="whitespace-pre-wrap text-sm">{callDetails.transcript}</pre>
+                  </div>
+                </div>
+              )}
+
+              {/* Recording and Actions */}
               <div className="flex gap-3">
                 {callDetails.recording_url && (
-                  <Button variant="outline">
+                  <Button variant="outline" onClick={() => window.open(callDetails.recording_url, '_blank')}>
                     <Download size={16} className="mr-2" />
                     Download Recording
                   </Button>
                 )}
-                {callDetails.transcript && (
-                  <Button variant="outline">
+                {callDetails.public_log_url && (
+                  <Button variant="outline" onClick={() => window.open(callDetails.public_log_url, '_blank')}>
                     <FileText size={16} className="mr-2" />
-                    View Transcript
+                    View Logs
                   </Button>
                 )}
               </div>
