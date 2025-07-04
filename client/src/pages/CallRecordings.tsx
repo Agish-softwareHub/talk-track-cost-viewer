@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Play, Pause, SkipBack, SkipForward, Download, Share, Star, Volume2, VolumeX, Search, Filter, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,17 +8,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
+import { CallRecording } from "@/types/recordings";
 
 export default function CallRecordings() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedRecording, setSelectedRecording] = useState(null);
+  const [selectedRecording, setSelectedRecording] = useState<CallRecording | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState([80]);
   const [playbackSpeed, setPlaybackSpeed] = useState("1");
   const [selectedFilter, setSelectedFilter] = useState("all");
 
-  const recordings = [
+  const recordings: CallRecording[] = [
     {
       id: "REC001",
       callId: "CALL-001",
@@ -108,23 +110,23 @@ export default function CallRecordings() {
     return matchesSearch && matchesFilter;
   });
 
-  const formatTime = (seconds) => {
+  const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleRecordingSelect = (recording) => {
+  const handleRecordingSelect = (recording: CallRecording): void => {
     setSelectedRecording(recording);
     setIsPlaying(false);
     setCurrentTime(0);
   };
 
-  const togglePlayPause = () => {
+  const togglePlayPause = (): void => {
     setIsPlaying(!isPlaying);
   };
 
-  const handleSeek = (value) => {
+  const handleSeek = (value: number[]): void => {
     if (selectedRecording) {
       setCurrentTime(value[0]);
     }

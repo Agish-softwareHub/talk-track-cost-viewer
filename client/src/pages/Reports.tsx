@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CallReport } from "@/types/reports";
 
 export default function Reports() {
   const [selectedTimeRange, setSelectedTimeRange] = useState("today");
@@ -14,7 +15,7 @@ export default function Reports() {
   const [selectedSentiment, setSelectedSentiment] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   
-  const callData = [
+  const callData: CallReport[] = [
     {
       id: "CALL-001",
       number: "+1 (555) 123-4567",
@@ -112,7 +113,7 @@ export default function Reports() {
     }
   ];
 
-  const [selectedCall, setSelectedCall] = useState(null);
+  const [selectedCall, setSelectedCall] = useState<CallReport | null>(null);
 
   const timeRanges = [
     { value: "today", label: "Today" },
@@ -153,7 +154,7 @@ export default function Reports() {
     return matchesSearch && matchesAgent && matchesStatus && matchesSentiment;
   });
 
-  const getSentimentBadge = (sentiment) => {
+  const getSentimentBadge = (sentiment: string) => {
     switch(sentiment) {
       case 'Positive': return <Badge className="bg-green-100 text-green-800 hover:bg-green-200"><ThumbsUp size={12} className="mr-1" />{sentiment}</Badge>;
       case 'Negative': return <Badge className="bg-red-100 text-red-800 hover:bg-red-200"><ThumbsDown size={12} className="mr-1" />{sentiment}</Badge>;
@@ -161,12 +162,12 @@ export default function Reports() {
     }
   };
 
-  const getScoreBadge = (score) => {
+  const getScoreBadge = (score: number) => {
     const color = score >= 8 ? "bg-green-100 text-green-800" : score >= 6 ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800";
     return <Badge className={color}><Star size={12} className="mr-1" />{score}/10</Badge>;
   };
 
-  const showCallDetails = (call) => {
+  const showCallDetails = (call: CallReport) => {
     setSelectedCall(call);
   };
 
@@ -240,7 +241,7 @@ export default function Reports() {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {selectedCall.tags?.map((tag) => (
+                {selectedCall.tags?.map((tag: string) => (
                   <Badge key={tag} variant="secondary" className="text-xs">
                     {tag}
                   </Badge>

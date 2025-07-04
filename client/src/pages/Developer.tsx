@@ -7,10 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { ApiEndpoint } from "@/types/developer";
 
 export default function Developer() {
   const [showApiKey, setShowApiKey] = useState(false);
-  const [selectedEndpoint, setSelectedEndpoint] = useState(null);
+  const [selectedEndpoint, setSelectedEndpoint] = useState<ApiEndpoint | null>(null);
   const { toast } = useToast();
 
   const apiKey = "sk_live_1234567890abcdef...";
@@ -23,7 +24,7 @@ export default function Developer() {
     });
   };
 
-  const endpoints = [
+  const endpoints: ApiEndpoint[] = [
     {
       id: "calls",
       title: "Call Management",
