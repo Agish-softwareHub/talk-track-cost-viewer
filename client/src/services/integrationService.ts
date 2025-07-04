@@ -26,7 +26,7 @@ export class IntegrationService {
         analytics,
         summary: {
           totalAgents: agents.length,
-          activeCalls: calls.filter(call => call.status === 'active').length,
+          activeCalls: calls.filter((call: any) => call.status === 'active').length,
           totalCalls: calls.length,
           avgSentiment: sentiment.overall || 0
         }
@@ -184,12 +184,12 @@ export class IntegrationService {
       };
 
       if (calls.calls.length > 0) {
-        const completedCalls = calls.calls.filter(call => call.call_status === 'ended');
+        const completedCalls = calls.calls.filter((call: any) => call.call_status === 'ended');
         
-        qualityMetrics.avgResponseTime = completedCalls.reduce((sum, call) => 
+        qualityMetrics.avgResponseTime = completedCalls.reduce((sum: number, call: any) => 
           sum + (call.agent_response_latency_p50 || 0), 0) / completedCalls.length;
         
-        qualityMetrics.avgCallDuration = completedCalls.reduce((sum, call) => 
+        qualityMetrics.avgCallDuration = completedCalls.reduce((sum: number, call: any) => 
           sum + (call.call_duration_ms || 0), 0) / completedCalls.length;
         
         qualityMetrics.successRate = (completedCalls.length / calls.calls.length) * 100;
