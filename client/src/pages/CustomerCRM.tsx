@@ -34,6 +34,99 @@ interface AIInsight {
   action?: string;
 }
 
+// Move customers array declaration to the top, before component
+const customers: Customer[] = [
+  {
+    id: "CUST001",
+    name: "John Anderson",
+    email: "john.anderson@email.com",
+    phone: "+1 (555) 123-4567",
+    company: "TechCorp Solutions",
+    status: "active",
+    tier: "premium",
+    location: "New York, NY",
+    lastContact: "2024-01-15",
+    totalCalls: 8,
+    totalSpent: "$12,450",
+    satisfaction: 4.8,
+    avatar: "JA",
+    joinDate: "2023-03-15",
+    notes: "Prefers AI agents for technical support, high satisfaction with automated responses",
+    tags: ["tech-savvy", "high-value", "automation"],
+    callHistory: [
+      { id: "1", date: "2024-01-15", type: "Support", duration: "12m", outcome: "Resolved" },
+      { id: "2", date: "2024-01-10", type: "Sales", duration: "8m", outcome: "Follow-up" },
+      { id: "3", date: "2024-01-05", type: "Technical", duration: "25m", outcome: "Escalated" }
+    ]
+  },
+  {
+    id: "CUST002",
+    name: "Sarah Mitchell",
+    email: "sarah.mitchell@company.com",
+    phone: "+1 (555) 987-6543",
+    company: "Design Studios Inc",
+    status: "active",
+    tier: "standard",
+    location: "San Francisco, CA",
+    lastContact: "2024-01-12",
+    totalCalls: 15,
+    totalSpent: "$5,280",
+    satisfaction: 4.2,
+    avatar: "SM",
+    joinDate: "2023-08-22",
+    notes: "Frequent user, prefers quick AI responses for routine inquiries",
+    tags: ["frequent-user", "design", "quick-response"],
+    callHistory: [
+      { id: "1", date: "2024-01-12", type: "Billing", duration: "6m", outcome: "Resolved" },
+      { id: "2", date: "2024-01-08", type: "Support", duration: "15m", outcome: "Resolved" }
+    ]
+  },
+  {
+    id: "CUST003",
+    name: "Michael Chen",
+    email: "m.chen@startup.io",
+    phone: "+1 (555) 456-7890",
+    company: "StartupFlow",
+    status: "potential",
+    tier: "basic",
+    location: "Austin, TX",
+    lastContact: "2024-01-14",
+    totalCalls: 3,
+    totalSpent: "$890",
+    satisfaction: 3.9,
+    avatar: "MC",
+    joinDate: "2024-01-01",
+    notes: "New to AI call agents, showing high interest in automation features",
+    tags: ["startup", "potential", "new-user"],
+    callHistory: [
+      { id: "1", date: "2024-01-14", type: "Sales", duration: "22m", outcome: "Interested" },
+      { id: "2", date: "2024-01-02", type: "Onboarding", duration: "18m", outcome: "Completed" }
+    ]
+  },
+  {
+    id: "CUST004",
+    name: "Lisa Rodriguez",
+    email: "lisa.r@consulting.com",
+    phone: "+1 (555) 321-0987",
+    company: "Global Consulting",
+    status: "inactive",
+    tier: "premium",
+    location: "Chicago, IL",
+    lastContact: "2023-12-20",
+    totalCalls: 22,
+    totalSpent: "$18,900",
+    satisfaction: 4.6,
+    avatar: "LR",
+    joinDate: "2022-11-10",
+    notes: "Previously active, satisfied with AI agent efficiency but needs re-engagement",
+    tags: ["consulting", "re-engagement-needed", "premium"],
+    callHistory: [
+      { id: "1", date: "2023-12-20", type: "Support", duration: "9m", outcome: "Resolved" },
+      { id: "2", date: "2023-12-15", type: "Account Review", duration: "35m", outcome: "Renewed" }
+    ]
+  }
+];
+
 export default function CustomerCRM() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -42,98 +135,6 @@ export default function CustomerCRM() {
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
   const [allCustomers, setAllCustomers] = useState<Customer[]>(customers);
   const { toast } = useToast();
-
-  const customers: Customer[] = [
-    {
-      id: "CUST001",
-      name: "John Anderson",
-      email: "john.anderson@email.com",
-      phone: "+1 (555) 123-4567",
-      company: "TechCorp Solutions",
-      status: "active",
-      tier: "premium",
-      location: "New York, NY",
-      lastContact: "2024-01-15",
-      totalCalls: 8,
-      totalSpent: "$12,450",
-      satisfaction: 4.8,
-      avatar: "JA",
-      joinDate: "2023-03-15",
-      notes: "Prefers AI agents for technical support, high satisfaction with automated responses",
-      tags: ["tech-savvy", "high-value", "automation"],
-      callHistory: [
-        { id: "1", date: "2024-01-15", type: "Support", duration: "12m", outcome: "Resolved" },
-        { id: "2", date: "2024-01-10", type: "Sales", duration: "8m", outcome: "Follow-up" },
-        { id: "3", date: "2024-01-05", type: "Technical", duration: "25m", outcome: "Escalated" }
-      ]
-    },
-    {
-      id: "CUST002",
-      name: "Sarah Mitchell",
-      email: "sarah.mitchell@company.com",
-      phone: "+1 (555) 987-6543",
-      company: "Design Studios Inc",
-      status: "active",
-      tier: "standard",
-      location: "San Francisco, CA",
-      lastContact: "2024-01-12",
-      totalCalls: 15,
-      totalSpent: "$5,280",
-      satisfaction: 4.2,
-      avatar: "SM",
-      joinDate: "2023-08-22",
-      notes: "Frequent user, prefers quick AI responses for routine inquiries",
-      tags: ["frequent-user", "design", "quick-response"],
-      callHistory: [
-        { id: "1", date: "2024-01-12", type: "Billing", duration: "6m", outcome: "Resolved" },
-        { id: "2", date: "2024-01-08", type: "Support", duration: "15m", outcome: "Resolved" }
-      ]
-    },
-    {
-      id: "CUST003",
-      name: "Michael Chen",
-      email: "m.chen@startup.io",
-      phone: "+1 (555) 456-7890",
-      company: "StartupFlow",
-      status: "potential",
-      tier: "basic",
-      location: "Austin, TX",
-      lastContact: "2024-01-14",
-      totalCalls: 3,
-      totalSpent: "$890",
-      satisfaction: 3.9,
-      avatar: "MC",
-      joinDate: "2024-01-01",
-      notes: "New to AI call agents, showing high interest in automation features",
-      tags: ["startup", "potential", "new-user"],
-      callHistory: [
-        { id: "1", date: "2024-01-14", type: "Sales", duration: "22m", outcome: "Interested" },
-        { id: "2", date: "2024-01-02", type: "Onboarding", duration: "18m", outcome: "Completed" }
-      ]
-    },
-    {
-      id: "CUST004",
-      name: "Lisa Rodriguez",
-      email: "lisa.r@consulting.com",
-      phone: "+1 (555) 321-0987",
-      company: "Global Consulting",
-      status: "inactive",
-      tier: "premium",
-      location: "Chicago, IL",
-      lastContact: "2023-12-20",
-      totalCalls: 22,
-      totalSpent: "$18,900",
-      satisfaction: 4.6,
-      avatar: "LR",
-      joinDate: "2022-11-10",
-      notes: "Previously active, satisfied with AI agent efficiency but needs re-engagement",
-      tags: ["consulting", "re-engagement-needed", "premium"],
-      callHistory: [
-        { id: "1", date: "2023-12-20", type: "Support", duration: "9m", outcome: "Resolved" },
-        { id: "2", date: "2023-12-15", type: "Account Review", duration: "35m", outcome: "Renewed" }
-      ]
-    }
-  ];
 
   const aiInsights: AIInsight[] = [
     {
